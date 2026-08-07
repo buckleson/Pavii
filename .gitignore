@@ -1,0 +1,24 @@
+.venv/
+node_modules/
+__pycache__/
+*.pyc
+.pytest_cache/
+.pytest-tmp/
+*.egg-info/
+build/
+dist/
+test-results/
+playwright-report/
+surfaces/gui/node_modules/
+surfaces/gui/dist/
+surfaces/gui/src-tauri/target/
+surfaces/gui/src-tauri/binaries/
+packaging/build/
+packaging/dist/
+.coverage
+*.log
+.DS_Store
+
+# Local secrets (live-smoke BYO keys) — never committed
+.env
+.pavii-secrets/
