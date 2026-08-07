@@ -93,7 +93,13 @@ jobs:
           key_path="$RUNNER_TEMP/pavii-updater.key"
           printf '%s' "$TAURI_SIGNING_PRIVATE_KEY" > "$key_path"
           echo "TAURI_SIGNING_PRIVATE_KEY=$key_path" >> "$GITHUB_ENV"
-      - name: Build macOS DMG
+      - name: Build unsigned macOS DMG
+        if: ${{ secrets.APPLE_CERTIFICATE == '' }}
+        env:
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: ./packaging/build_dmg.sh
+      - name: Build signed macOS DMG
+        if: ${{ secrets.APPLE_CERTIFICATE != '' }}
         env:
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
           APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
