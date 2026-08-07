@@ -1,0 +1,207 @@
+name: PAVii Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to publish. Defaults to a dev tag for manual runs."
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  windows-x64:
+    name: Windows x64
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: surfaces/gui/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install LLVM/libclang
+        shell: pwsh
+        run: |
+          choco install llvm -y --no-progress
+          "LIBCLANG_PATH=C:\Program Files\LLVM\bin" | Out-File -FilePath $env:GITHUB_ENV -Append
+      - name: Install Python build deps
+        shell: pwsh
+        run: |
+          py -m venv .venv
+          .\.venv\Scripts\python -m pip install --upgrade pip
+          .\.venv\Scripts\pip install -e ".[bedrock]" pyinstaller tzdata typer
+      - name: Install GUI deps
+        working-directory: surfaces/gui
+        run: npm ci
+      - name: Prepare updater signing key
+        shell: pwsh
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+        run: |
+          $keyPath = Join-Path $env:RUNNER_TEMP 'pavii-updater.key'
+          Set-Content -Path $keyPath -Value $env:TAURI_SIGNING_PRIVATE_KEY -NoNewline
+          "TAURI_SIGNING_PRIVATE_KEY=$keyPath" | Out-File -FilePath $env:GITHUB_ENV -Append
+      - name: Build Windows installers
+        shell: pwsh
+        env:
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: .\packaging\build_windows.ps1
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pavii-windows-x64
+          path: |
+            surfaces/gui/src-tauri/target/release/bundle/nsis/*
+            surfaces/gui/src-tauri/target/release/bundle/msi/*
+
+  macos-arm64:
+    name: macOS arm64
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: surfaces/gui/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install Python build deps
+        run: |
+          python3 -m venv .venv
+          .venv/bin/python -m pip install --upgrade pip
+          .venv/bin/pip install -e ".[bedrock]" pyinstaller tzdata typer
+      - name: Install GUI deps
+        working-directory: surfaces/gui
+        run: npm ci
+      - name: Prepare updater signing key
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+        run: |
+          key_path="$RUNNER_TEMP/pavii-updater.key"
+          printf '%s' "$TAURI_SIGNING_PRIVATE_KEY" > "$key_path"
+          echo "TAURI_SIGNING_PRIVATE_KEY=$key_path" >> "$GITHUB_ENV"
+      - name: Build macOS DMG
+        env:
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+          APPLE_API_KEY_PATH: ${{ secrets.APPLE_API_KEY_PATH }}
+        run: ./packaging/build_dmg.sh
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pavii-macos-arm64
+          path: |
+            surfaces/gui/src-tauri/target/release/bundle/dmg/*
+            surfaces/gui/src-tauri/target/release/bundle/macos/*.tar.gz*
+
+  publish-release:
+    name: Publish release + updater manifest
+    needs: [windows-x64, macos-arm64]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+      - name: Resolve release tag
+        id: release
+        shell: bash
+        run: |
+          version="$(python3 - <<'PY'
+          import json
+          print(json.load(open("surfaces/gui/src-tauri/tauri.conf.json", encoding="utf-8"))["version"])
+          PY
+          )"
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            tag="${GITHUB_REF_NAME}"
+          elif [ -n "${{ github.event.inputs.tag }}" ]; then
+            tag="${{ github.event.inputs.tag }}"
+          else
+            tag="v${version}-dev.${GITHUB_RUN_NUMBER}"
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - name: Generate latest.json
+        env:
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import datetime
+          import json
+          import os
+          from pathlib import Path
+
+          root = Path("release-artifacts")
+          repo = os.environ["GITHUB_REPOSITORY"]
+          tag = os.environ["RELEASE_TAG"]
+          version = json.load(open("surfaces/gui/src-tauri/tauri.conf.json", encoding="utf-8"))["version"]
+          base_url = f"https://github.com/{repo}/releases/download/{tag}"
+
+          def one(pattern: str) -> Path:
+              matches = sorted(root.rglob(pattern))
+              if not matches:
+                  raise SystemExit(f"missing release artifact matching {pattern}")
+              return matches[0]
+
+          def signature_for(artifact: Path) -> str:
+              sig = artifact.with_name(artifact.name + ".sig")
+              if not sig.exists():
+                  raise SystemExit(f"missing updater signature for {artifact}")
+              return sig.read_text(encoding="utf-8").strip()
+
+          windows = one("PAVii_*_x64-setup.exe")
+          macos = one("*.app.tar.gz")
+
+          latest = {
+              "version": version,
+              "notes": "PAVii Phase 1 release. macOS DMG may be unsigned/not notarized unless Apple signing secrets were supplied.",
+              "pub_date": datetime.datetime.now(datetime.UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+              "platforms": {
+                  "windows-x86_64": {
+                      "signature": signature_for(windows),
+                      "url": f"{base_url}/{windows.name}",
+                  },
+                  "darwin-aarch64": {
+                      "signature": signature_for(macos),
+                      "url": f"{base_url}/{macos.name}",
+                  },
+              },
+          }
+          Path("latest.json").write_text(json.dumps(latest, indent=2) + "\n", encoding="utf-8")
+          PY
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        shell: bash
+        run: |
+          notes="PAVii release ${RELEASE_TAG}. macOS DMG is unsigned/not notarized unless Apple signing secrets were supplied."
+          mapfile -t files < <(find release-artifacts -type f | sort)
+          files+=(latest.json)
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "${files[@]}" --clobber
+            gh release edit "$RELEASE_TAG" --title "PAVii ${RELEASE_TAG}" --notes "$notes" --latest
+          else
+            gh release create "$RELEASE_TAG" "${files[@]}" \
+              --title "PAVii ${RELEASE_TAG}" \
+              --notes "$notes" \
+              --latest
+          fi
