@@ -24,6 +24,7 @@ def _no_slack_network(monkeypatch):
     instantly at a dead loopback port, never reach slack.com — a slow real
     answer was blowing the 2s wait_dispatched window intermittently."""
     monkeypatch.setenv("SLACK_API_URL", "http://127.0.0.1:9/")
+    monkeypatch.setenv("SLACK_API_TIMEOUT", "0.05")
 
 
 TEAMS = {
@@ -143,7 +144,7 @@ async def test_relay_resolves_names_and_mentions(monkeypatch):
         if method == "users.info":
             names = {
                 "U_ALICE": {"profile": {"display_name": "Rohit"}},
-                "UBOT1": {"profile": {"display_name": "ocw"}},
+                "UBOT1": {"profile": {"display_name": "Pavii"}},
             }
             return {"ok": True, "user": names.get(params["user"], {})}
         if method == "conversations.info":
@@ -166,7 +167,7 @@ async def test_relay_resolves_names_and_mentions(monkeypatch):
     ev = events[0]
     assert ev.source.user_name == "Rohit"  # not U_ALICE
     assert ev.source.chat_name == "ocw-test"  # not C1
-    assert ev.text == "@ocw hey bot"  # <@UBOT1> rewritten
+    assert ev.text == "@Pavii hey bot"  # <@UBOT1> rewritten
 
 
 async def test_relay_name_cache_is_per_workspace(monkeypatch):

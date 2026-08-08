@@ -14,7 +14,7 @@ const KEY = "ocw.slack.howitworks.collapsed";
 const DUR = 8000; // per-scene loop, ms
 const TABS = ["Mention → session", "Threads stay connected", "Allow teammates"];
 const CAPTIONS = [
-  "Mention @PAVii in any channel it's invited to — a session opens here, and the answer lands back in Slack as a thread.",
+  "Mention @Pavii in any channel it's invited to — a session opens here, and the answer lands back in Slack as a thread.",
   "Mention it again inside the thread — the conversation continues in the same session, context intact. The thread is the session.",
   "Teammates aren't auto-trusted: their first mention waits for your OK, then they're on the People list.",
 ];
@@ -250,7 +250,7 @@ function PVRail({ hot, hotSub, glow }: { hot?: string; hotSub?: string; glow?: b
           {hotSub}
         </div>
       )}
-      <div className="hiw-sess"><b>Jira vs Linear</b>Coworker</div>
+      <div className="hiw-sess"><b>Jira vs Linear</b>PAVii</div>
     </div>
   );
 }
@@ -303,7 +303,7 @@ function SceneMention({ meFirst, meInitial }: { meFirst: string; meInitial: stri
                 </span>
               }
             >
-              <span className="hiw-men">@PAVii</span> summarize this thread
+              <span className="hiw-men">@Pavii</span> summarize this thread
             </Msg>
           </div>
           <SlackComposer placeholder="Message #launch-room" />
@@ -311,7 +311,7 @@ function SceneMention({ meFirst, meInitial }: { meFirst: string; meInitial: stri
             <div className="hiw-th">Thread <span className="hiw-sub"># launch-room</span><span className="hiw-x">✕</span></div>
             <div className="hiw-tmsgs">
               <Msg av={meInitial} avBg="#3b82c4" name={meFirst} ts="6:33 PM">
-                <span className="hiw-men">@PAVii</span> summarize this thread
+                <span className="hiw-men">@Pavii</span> summarize this thread
               </Msg>
               <div className="hiw-cnt">1 reply</div>
               <Msg av="PV" avBg="#4a154b" name="PAVii" app ts="6:34 PM">
@@ -329,7 +329,7 @@ function SceneMention({ meFirst, meInitial }: { meFirst: string; meInitial: stri
             Summarize #launch-room <span className="hiw-via">via Slack</span>
           </div>
           <div className="hiw-PVchat">
-            <div className="hiw-bub user hiw-k" style={d("2.8s")}>@PAVii summarize this thread</div>
+            <div className="hiw-bub user hiw-k" style={d("2.8s")}>@Pavii summarize this thread</div>
             <div className="hiw-bub agent hiw-k" style={d("3.6s")}>
               Reading the thread… signups up 3.4×, top referrer is the press page. <i>(replying in the Slack thread)</i>
             </div>
@@ -365,7 +365,7 @@ function SceneThread({ meFirst, meInitial }: { meFirst: string; meInitial: strin
                 </span>
               }
             >
-              <span className="hiw-men">@PAVii</span> summarize this thread
+              <span className="hiw-men">@Pavii</span> summarize this thread
             </Msg>
           </div>
           <SlackComposer placeholder="Message #launch-room" />
@@ -374,14 +374,14 @@ function SceneThread({ meFirst, meInitial }: { meFirst: string; meInitial: strin
             <div className="hiw-th">Thread <span className="hiw-sub"># launch-room</span><span className="hiw-x">✕</span></div>
             <div className="hiw-tmsgs">
               <Msg av={meInitial} avBg="#3b82c4" name={meFirst} ts="6:33 PM">
-                <span className="hiw-men">@PAVii</span> summarize this thread
+                <span className="hiw-men">@Pavii</span> summarize this thread
               </Msg>
               <div className="hiw-cnt">2 replies</div>
               <Msg av="PV" avBg="#4a154b" name="PAVii" app ts="6:34 PM">
                 Launch traction: signups up 3.4×…
               </Msg>
               <Msg av="P" avBg="#7c6cd0" name="Priya N" ts="6:36 PM" delay=".8s">
-                <span className="hiw-men">@PAVii</span> break it down by country?
+                <span className="hiw-men">@Pavii</span> break it down by country?
               </Msg>
               <Msg av="PV" avBg="#4a154b" name="PAVii" app ts="6:36 PM" delay="4.8s">
                 Top: US 41% · India 22% · Germany 9%…
@@ -401,7 +401,7 @@ function SceneThread({ meFirst, meInitial }: { meFirst: string; meInitial: strin
           <div className="hiw-sess hot hiw-stay hiw-glow" style={{ "--g": "2.4s" } as React.CSSProperties}>
             <b>Summarize #launch-room</b>via Slack
           </div>
-          <div className="hiw-sess"><b>Jira vs Linear</b>Coworker</div>
+          <div className="hiw-sess"><b>Jira vs Linear</b>PAVii</div>
         </div>
         <div className="hiw-PVmain">
           <div className="hiw-PVtitle">
@@ -442,7 +442,7 @@ function SceneTeammates() {
                 </span>
               }
             >
-              <span className="hiw-men">@PAVii</span> pull the signup numbers?
+              <span className="hiw-men">@Pavii</span> pull the signup numbers?
             </Msg>
           </div>
           <SlackComposer placeholder="Message #launch-room" />

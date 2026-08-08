@@ -4,10 +4,11 @@ import type { SessionInfo } from "../types";
 import { isProjectScoped, shortPersonaName } from "../personaScope";
 import { Icon } from "./Icon";
 import { baseName } from "../paths";
+import { isPrimaryShortcut, resultShortcutLabel } from "../shortcuts";
 
 // Command-palette search (Codex-style): clicking Search opens this overlay over the whole app
 // rather than filtering the sidebar in place (which made the grouped list collapse). It searches
-// ALL sessions, split into Pinned + Recent, filters as you type, and supports ↑/↓ + Enter + ⌘1–9.
+// ALL sessions, split into Pinned + Recent, filters as you type, and supports ↑/↓ + Enter + Mod+1–9.
 
 const byRecent = (a: SessionInfo, b: SessionInfo) =>
   (b.updated_at || "").localeCompare(a.updated_at || "");
@@ -48,7 +49,7 @@ export function SearchModal({
   const filtered = real.filter(match);
   const pinned = filtered.filter((s) => s.pinned).sort(byRecent);
   const recent = filtered.filter((s) => !s.pinned).sort(byRecent);
-  const ordered = [...pinned, ...recent]; // flat order drives keyboard nav + ⌘N
+  const ordered = [...pinned, ...recent]; // flat order drives keyboard nav + Mod+N
 
   // Reset the highlight whenever the result set changes.
   useEffect(() => {
@@ -75,7 +76,7 @@ export function SearchModal({
     } else if (e.key === "Enter") {
       e.preventDefault();
       choose();
-    } else if ((e.metaKey || e.ctrlKey) && e.key >= "1" && e.key <= "9") {
+    } else if (isPrimaryShortcut(e) && e.key >= "1" && e.key <= "9") {
       const idx = Number(e.key) - 1;
       if (ordered[idx]) {
         e.preventDefault();
@@ -102,7 +103,7 @@ export function SearchModal({
         <span className="text-[12px] text-faint shrink-0">{tagFor(s)}</span>
         {idx < 9 && (
           <kbd className="text-[10.5px] text-faint bg-paper border border-line rounded px-1.5 py-0.5 shrink-0 font-sans">
-            ⌘{idx + 1}
+            {resultShortcutLabel(idx + 1)}
           </kbd>
         )}
       </button>

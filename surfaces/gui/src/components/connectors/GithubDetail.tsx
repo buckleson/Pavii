@@ -98,7 +98,7 @@ export function GithubDetail({ c, cloud, onChanged }: DetailProps) {
       {!c.connected && (
         <div className={GRP}>
           <div className={ROW + " text-[12.5px] text-muted"}>
-            One @ocw-agent App, installed per account or org — you pick the repos on
+            One @Pavii App, installed per account or org — you pick the repos on
             GitHub; each installation keeps its own allow-list.
             {cloud?.signed_in ? "" : " One-click needs cloud sign-in; a PAT works without it."}
           </div>
@@ -121,7 +121,7 @@ export function GithubDetail({ c, cloud, onChanged }: DetailProps) {
         <div className={GRP} data-testid="github-manual-card">
           <div className={ROW + " text-[12.5px] text-muted"}>
             Personal access token · tools only. Install the GitHub App to let
-            @-mentions and the agent label reach this computer.
+            @-mentions and the PAVii label reach this computer.
           </div>
         </div>
       )}
@@ -138,8 +138,7 @@ export function GithubDetail({ c, cloud, onChanged }: DetailProps) {
       <ToolsDisclosure c={c} onChanged={onChanged} />
       {c.connected && relay && (
         <div className={FOOT + " mt-2"}>
-          Triggers: @ocw-agent mentions and the “ocw-agent” label. The agent replies as
-          ocw-agent[bot].
+          Triggers: @Pavii mentions and the “PAVii” label. PAVii replies from the connected GitHub App.
         </div>
       )}
 
@@ -197,7 +196,7 @@ function InstallationGroup({
         {empty ? (
           <div className={ROW}>
             <span className="min-w-0 flex-1 text-[12.5px] text-muted">
-              No one allowed yet — @ocw-agent mentions show up here for your OK.
+              No one allowed yet — @Pavii mentions show up here for your OK.
             </span>
             <DisconnectBtn id={inst.installation_id} busy={busy} onClick={disconnect} />
           </div>

@@ -1,6 +1,6 @@
 """Managed GitHub relay adapter — the second consumer of the shared relay WS.
 
-Inbound `@ocw` mentions / `ocw`-label events arrive as relay frames tagged
+Inbound `@Pavii` mentions / `PAVii`-label events arrive as relay frames tagged
 `provider: github` (github-relay-spec §7); the RelayHub fans them here. The
 adapter maps them to MessageEvents with `github:owner/repo#N` addressing —
 `installation_id` rides in `source.team_id`, so the gateway's per-team

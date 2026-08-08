@@ -65,6 +65,8 @@ import { ApprovalCard } from "./components/ApprovalCard";
 import { DirectoryRequestCard } from "./components/DirectoryRequestCard";
 import { PlanCard } from "./components/PlanCard";
 import { WorkspaceTrustPrompt } from "./components/WorkspaceTrustPrompt";
+import paviiLogo from "../assets/icon.png";
+import { isSettingsShortcut, isSidebarShortcut, sidebarShortcutLabel } from "./shortcuts";
 
 const newId = () =>
   (crypto as any).randomUUID ? crypto.randomUUID().slice(0, 12) : Math.random().toString(36).slice(2, 14);
@@ -246,7 +248,7 @@ export function App() {
   };
   const [browserRefreshKey, setBrowserRefreshKey] = useState(0);
   const [railHidden, setRailHidden] = useState(false);
-  // Left-nav collapse (⌘B): when collapsed the sidebar leaves the grid so content reclaims the
+  // Left-nav collapse (platform shortcut): when collapsed the sidebar leaves the grid so content reclaims the
   // width; hovering the left edge peeks it back as a floating overlay. Persisted per-device.
   const [navCollapsed, setNavCollapsed] = useState<boolean>(() => {
     try { return localStorage.getItem(NAV_COLLAPSED_KEY) === "1"; } catch { return false; }
@@ -278,12 +280,12 @@ export function App() {
   }, [navCollapsed]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "b") {
+      if (isSidebarShortcut(e)) {
         e.preventDefault();
         toggleNav();
       }
-      // ⌘, — the platform Settings shortcut (advertised in the account menu, §26).
-      if ((e.metaKey || e.ctrlKey) && e.key === ",") {
+      // Platform Settings shortcut (advertised in the app menu).
+      if (isSettingsShortcut(e)) {
         e.preventDefault();
         setSurface("settings");
       }
@@ -1159,7 +1161,7 @@ export function App() {
     modelLabels[model]?.split(" · ")[0] ||
     (model.includes(":") ? model.split(":").slice(1).join(":") : model);
   // Persona name dropped for this release (owner ask 2026-07-22): personas are hidden,
-  // so "Coworker" read as noise. The model (+ project folder) are the real fixed facts.
+  // so persona names read as noise. The model (+ project folder) are the real fixed facts.
   const subtitleParts = [modelDisplay];
   if (isProjectScoped(personaOf(agent)) && workspace) subtitleParts.push(baseName(workspace));
   const activeInfo = sessions.find((s) => s.session_id === sessionId);
@@ -1196,10 +1198,9 @@ export function App() {
             <span /><span /><span />
           </div>
         )}
-        {/* The real PAVii mark (6-point star, same as the app/tray icon) — the old
-            ✦ text glyph was a 4-point sparkle that read as another product's logo. */}
+        {/* The real PAVii mark, from the packaged app asset. */}
         <div className="boot-mark">
-          <Icon name="logo" size={38} />
+          <img src={paviiLogo} alt="PAVii" className="w-[38px] h-[38px] object-contain" />
         </div>
         <div className="boot-text">
           {resumedExisting ? "Restoring your session…" : "Starting PAVii…"}
@@ -1273,7 +1274,7 @@ export function App() {
           aria-hidden="true"
         />
       )}
-      {/* Explicit reveal affordance while collapsed (alongside hover-peek + ⌘B) — on every
+      {/* Explicit reveal affordance while collapsed (alongside hover-peek + the platform shortcut) — on every
           surface EXCEPT the session view, whose topbar carries the [sidebar][+][search] cluster
           instead (§22; no duplicate reveal buttons). */}
       {navCollapsed && !navPeek && surface !== "session" && (
@@ -1281,7 +1282,7 @@ export function App() {
           className="nav-reveal-btn"
           onClick={toggleNav}
           onMouseEnter={() => setNavPeek(true)}
-          title="Show sidebar (⌘B)"
+          title={`Show sidebar (${sidebarShortcutLabel()})`}
           aria-label="Show sidebar"
         >
           <Icon name="sidebar" size={16} />
@@ -1398,7 +1399,7 @@ export function App() {
                   className="topbar-icon-btn"
                   onClick={toggleNav}
                   aria-label="Show sidebar"
-                  title="Show sidebar (⌘B)"
+                  title={`Show sidebar (${sidebarShortcutLabel()})`}
                 >
                   <Icon name="sidebar" size={16} />
                 </button>
@@ -1617,7 +1618,7 @@ export function App() {
                   ? "Ask the coder to build, fix, or explain…  (drop or paste files)"
                   : agent === "chat"
                     ? "Ask anything…  (drop or paste files)"
-                    : "Ask the coworker…  (drop or paste files)"
+                    : "Ask PAVii…  (drop or paste files)"
               }
               approvalSlot={
                 // Live inline cards are for ATTENDED sessions only; when Unattended the prompt is

@@ -7,23 +7,20 @@ export function isProjectScoped(p?: { workspace?: string; family?: string }): bo
   return p?.family === "code";
 }
 
-// Persona naming: the product is "PAVii"; the personas are a "Coworker" family — Coworker
-// (general), Code Coworker, Ops Coworker. In lists/chrome we use the SHORT label (Coworker / Code /
-// Ops); the persona detail page uses the FULL family name. Backend names are left untouched (the
-// API + tests keep "PAVii" / "Ops Coworker"); this is purely the display layer.
+// Persona naming: the product-facing assistant is PAVii. Internal ids keep their legacy names for
+// compatibility, but chrome and search never expose "coworker" as a product label.
 
-// Short label for the sidebar + top bar: "Coworker" / "Code" / "Ops" / "Chat".
+// Short label for the sidebar + top bar: "PAVii" / "Code" / "Ops" / "Chat".
 export function shortPersonaName(name?: string, id?: string): string {
-  if (id === "cowork") return "Coworker";
+  if (id === "cowork") return "PAVii";
   const n = (name || id || "").trim();
   return n.replace(/\s*coworker$/i, "").trim() || n;
 }
 
-// Full family name for the persona detail page: "Coworker" / "Code Coworker" / "Ops Coworker".
-// Chat isn't a coworker — left as-is.
+// Full display name for the persona detail page. Chat isn't a PAVii persona — left as-is.
 export function fullPersonaName(name?: string, id?: string): string {
-  if (id === "cowork") return "Coworker";
+  if (id === "cowork") return "PAVii";
   const n = (name || id || "").trim();
   if (id === "chat" || !n) return n;
-  return /coworker$/i.test(n) ? n : `${n} Coworker`;
+  return n.replace(/\s*coworker$/i, "").trim() || n;
 }

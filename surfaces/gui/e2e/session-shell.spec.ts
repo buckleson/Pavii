@@ -14,7 +14,7 @@ test("top-left cluster renders only while the sidebar is collapsed", async ({ pa
 
   // Collapse → the cluster appears with all three actions; the floating reveal button does NOT
   // double up on the session surface (the cluster's sidebar button replaces it).
-  await page.keyboard.press("Meta+b");
+  await page.keyboard.press("Control+b");
   const cluster = page.getByTestId("topbar-cluster");
   await expect(cluster).toBeVisible();
   await expect(cluster.getByRole("button", { name: "Show sidebar" })).toBeVisible();
@@ -46,7 +46,7 @@ test("facts subtitle: absent on a fresh session, model-only after the first turn
 
   // First turn → the facts move up to the subtitle; the picker STAYS in the composer
   // (§17 rev 2026-07-22: mid-session model switching shipped, so it remains actionable).
-  const box = page.getByPlaceholder(/Ask the coworker/);
+  const box = page.getByPlaceholder(/Ask PAVii/);
   await box.fill("hello");
   await page.getByRole("button", { name: "Send" }).click();
   await expect(page.getByText(/Echo: hello/)).toBeVisible();

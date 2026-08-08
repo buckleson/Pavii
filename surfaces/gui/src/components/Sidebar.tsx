@@ -20,11 +20,12 @@ import { PersonaGlyph, personaGlyph } from "./personaIcon";
 import { SearchModal } from "./SearchModal";
 import { baseName } from "../paths";
 import { showPersonas } from "../flags";
+import { settingsShortcutLabel, sidebarShortcutLabel } from "../shortcuts";
 
 // Session surfaces shown as accordions, in display order. The surfaced personas drive this list
 // (so third-party / Ops personas appear); the hardcoded set is the fallback before personas load.
 const SURFACES: { key: string; label: string; icon: IconName; cls: string }[] = [
-  { key: "cowork", label: "Coworker", icon: "diamond", cls: "ico-cowork" },
+  { key: "cowork", label: "PAVii", icon: "diamond", cls: "ico-cowork" },
   { key: "chat", label: "Chat", icon: "chat", cls: "ico-chat" },
   { key: "code", label: "Code", icon: "code", cls: "ico-code" },
 ];
@@ -134,7 +135,7 @@ interface Props {
   integrationsActive: boolean;
   auditActive: boolean;
   inboxActive: boolean;
-  // Collapse controls (⌘B / hover-peek). `onCollapse` docks/undocks; `onPeekLeave` hides the
+  // Collapse controls (platform shortcut / hover-peek). `onCollapse` docks/undocks; `onPeekLeave` hides the
   // floating peek when the pointer leaves the panel.
   collapsed?: boolean;
   onCollapse?: () => void;
@@ -678,7 +679,7 @@ export function Sidebar(props: Props) {
     ) : null;
 
   // RECENT header with the group/filter control (§20) — the group toggle moved off the brand bar.
-  // "Group by" flips the persona accordion ↔ chronological list; "Filter by coworker" narrows to
+  // "Group by" flips the persona accordion ↔ chronological list; "Filter by assistant" narrows to
   // the checked personas (none checked = all shown).
   const recentHeader = () => {
     const filterPersonaList = (personas || []).filter(
@@ -725,7 +726,7 @@ export function Sidebar(props: Props) {
                 <div className="my-1 border-t border-line" />
                 <div className="px-2 pt-1 pb-1 flex items-center justify-between">
                   <span className="text-[10.5px] uppercase tracking-[0.06em] text-faint font-semibold">
-                    Filter by coworker
+                    Filter by assistant
                   </span>
                   {filterPersonas.size > 0 && (
                     <button className="text-[11px] text-accent" onClick={() => setFilterPersonas(new Set())}>
@@ -971,11 +972,15 @@ export function Sidebar(props: Props) {
           hovering the reveal peeks the nav and the pin lands right under the cursor — no travel.
           data-tauri-drag-region drags the window; on desktop the row clears the traffic lights. */}
       <div className="brand px-3.5 pt-2.5 pb-2 flex items-center gap-2" data-tauri-drag-region>
-        {/* Collapse (dock) / pin the sidebar. ⌘B mirrors this. */}
+        {/* Collapse (dock) / pin the sidebar. The platform shortcut mirrors this. */}
         {props.onCollapse && (
           <button
             className="nav-pin-btn w-7 h-7 grid place-items-center rounded-md text-faint hover:text-ink hover:bg-paper shrink-0"
-            title={props.collapsed ? "Dock sidebar (⌘B)" : "Collapse sidebar (⌘B)"}
+            title={
+              props.collapsed
+                ? `Dock sidebar (${sidebarShortcutLabel()})`
+                : `Collapse sidebar (${sidebarShortcutLabel()})`
+            }
             aria-label={props.collapsed ? "Dock sidebar" : "Collapse sidebar"}
             onClick={props.onCollapse}
           >
@@ -1130,7 +1135,7 @@ export function Sidebar(props: Props) {
                   "Settings",
                   props.onManage,
                   false,
-                  <span className="text-[11px] text-faint">⌘ ,</span>,
+                  <span className="text-[11px] text-faint">{settingsShortcutLabel()}</span>,
                 )}
                 {appMenuItem("clock", "Automations", props.onOpenScheduled, props.scheduledActive)}
                 {appMenuItem("audit", "Activity", props.onOpenAudit, props.auditActive)}

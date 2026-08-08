@@ -1,7 +1,7 @@
 #requires -Version 5.1
 <#
 .SYNOPSIS
-  Build the Coworker Windows desktop app + NSIS (.exe) and MSI installers.
+  Build the PAVii Windows desktop app + NSIS (.exe) and MSI installers.
 
 .DESCRIPTION
   The Windows counterpart to build_dmg.sh:

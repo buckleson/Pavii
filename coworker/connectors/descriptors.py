@@ -609,7 +609,7 @@ DESCRIPTORS: list[ConnectorDescriptor] = [
     ConnectorDescriptor(
         name="github",
         title="GitHub",
-        icon="⌘",
+        icon="◇",
         blurb="Work with issues, pull requests, repository files, and CI status.",
         auth="token",
         # Managed relay makes GitHub two-way: @-mentions and the agent label

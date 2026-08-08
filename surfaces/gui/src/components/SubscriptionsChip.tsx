@@ -235,7 +235,7 @@ export function ChannelPicker({
               )}
               {!r.is_member && (
                 <span className="block text-[11px] text-warnInk">
-                  invite @ocw to this channel in Slack so it can listen
+                  invite @Pavii to this channel in Slack so it can listen
                 </span>
               )}
             </button>

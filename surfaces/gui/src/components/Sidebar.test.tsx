@@ -95,7 +95,7 @@ describe("Sidebar group/filter control", () => {
     });
 
     // Close the popover (it stays open so you can group AND filter in one visit) before asserting
-    // the accordion — otherwise "Ops" also matches the filter-by-coworker checkbox.
+    // the accordion — otherwise "Ops" also matches the filter-by-assistant checkbox.
     fireEvent.click(control);
 
     // Grouped view = the per-persona accordion. The Ops header appears; expanding it lists its

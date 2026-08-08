@@ -223,7 +223,7 @@ function SlackOneClick({ c, cloud }: { c: Connector; cloud: CloudStatus | null }
   return (
     <div className="px-5 py-4 space-y-3">
       <p className="text-[13px] text-muted">
-        Opens Slack in your browser — approve @ocw for the workspace. No tokens; works for any
+        Opens Slack in your browser — approve @Pavii for the workspace. No tokens; works for any
         number of workspaces.
       </p>
       {cloud?.signed_in ? (
@@ -255,9 +255,9 @@ function GithubOneClick({ c, cloud }: { c: Connector; cloud: CloudStatus | null 
   return (
     <div className="px-5 py-4 space-y-3">
       <p className="text-[13px] text-muted">
-        Opens GitHub in your browser — approve PAVii there. An existing @ocw-agent App
+        Opens GitHub in your browser — approve PAVii there. An existing @Pavii App
         installation links right up; otherwise you'll pick an account and repos. No tokens
-        typed; the agent acts as ocw-agent[bot].
+        typed; PAVii acts from the connected GitHub App.
       </p>
       {cloud?.signed_in ? (
         /* One button: the broker is authorize-first — it links an existing installation or

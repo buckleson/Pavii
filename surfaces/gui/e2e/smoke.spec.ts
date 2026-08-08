@@ -6,5 +6,5 @@ test("app loads with the persona nav and composer", async ({ page }) => {
   // New session + Search are the fixed top nav.
   await expect(page.getByRole("button", { name: /New session/i })).toBeVisible();
   // The persona groups render from /v1/personas.
-  await expect(page.getByText("Ops", { exact: true })).toBeVisible();
+  await expect(page.getByText("Ops PAVii", { exact: true })).toBeVisible();
 });

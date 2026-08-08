@@ -175,7 +175,7 @@ export function Onboarding({ onDone }: { onDone: (next?: "work" | "gallery" | "a
           <section data-testid="ob-step-tools" className="flex-1 min-h-0 flex flex-col">
             <h1 className="text-[19px] font-semibold">Connect your everyday tools</h1>
             <p className="text-[13px] text-muted mt-0.5 mb-3">
-              Chat can only advise. Connected, your coworker does the actual work:
+              Chat can only advise. Connected, PAVii does the actual work:
             </p>
 
             <div className="flex-1 min-h-0 overflow-y-auto pr-1" data-testid="ob-tool-gallery">
@@ -350,7 +350,7 @@ export function Onboarding({ onDone }: { onDone: (next?: "work" | "gallery" | "a
                 ✦
               </span>
               <span className="flex-1 min-w-0 text-left">
-                <b className="block text-[13.5px]">Start working with Coworker</b>
+                <b className="block text-[13.5px]">Start working with PAVii</b>
                 <span className="text-[12px] text-muted">
                   Open a session and just ask — analyze files, draft, research, build.
                 </span>
@@ -358,7 +358,7 @@ export function Onboarding({ onDone }: { onDone: (next?: "work" | "gallery" | "a
               <span className="text-faint self-center">›</span>
             </button>
 
-            {/* The Specialist-coworkers gallery card and the per-session-scope line stay HIDDEN
+            {/* The specialist assistant gallery card and the per-session-scope line stay HIDDEN
                 (owner call 2026-07-12); the finish("gallery") plumbing remains for their return. */}
 
             <p className="text-[11px] text-faint text-center mt-auto pt-5">

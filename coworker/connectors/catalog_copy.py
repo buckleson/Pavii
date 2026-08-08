@@ -13,10 +13,10 @@ for every available connector — tests/test_connectors.py enforces it.
 from __future__ import annotations
 
 ABOUT: dict[str, str] = {
-    "telegram": "Chat with your coworker from Telegram. Messages to your bot "
+    "telegram": "Chat with PAVii from Telegram. Messages to your bot "
     "reach the agent and replies come back to the same chat — only senders on "
     "your allow-list get through.",
-    "slack": "Bring your coworker into Slack: mention it in a channel or DM it, "
+    "slack": "Bring PAVii into Slack: mention @Pavii in a channel or DM it, "
     "and replies land in-thread. Any number of workspaces can be connected, "
     "each with its own allow-list of who may talk to the agent.",
     "email": "Read, search, and send mail on any IMAP account — Gmail, iCloud, "
@@ -32,7 +32,7 @@ ABOUT: dict[str, str] = {
     "approval.",
     "github": "Work with issues, pull requests, repository files, and CI "
     "status. One click installs the PAVii GitHub App on the repositories "
-    "you pick; mention the agent on an issue or PR and it answers from your "
+    "you pick; mention @Pavii on an issue or PR and it answers from your "
     "desktop.",
     "outlook": "Search, summarize, and send Microsoft 365 mail, and run your "
     "calendar — create and move meetings, respond to invites. Multiple "

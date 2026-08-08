@@ -1,5 +1,5 @@
 // Cold-boot fixes (owner-hit 2026-07-23): the splash wears the real PAVii mark
-// (6-point star SVG, not the ✦ text glyph that read as another product's logo), and the
+// (packaged PNG logo, not the old sparkle glyph), and the
 // model picker recovers when the mount-time settings fetch loses the race against the
 // sidecar boot — previously "Loading models…" stuck until the user visited Settings.
 import { expect } from "@playwright/test";
@@ -14,7 +14,7 @@ test("boot splash shows the PAVii mark, not the sparkle glyph", async ({ page })
   await page.goto("/");
   const mark = page.locator(".boot-mark");
   await expect(mark).toBeVisible();
-  await expect(mark.locator("svg")).toBeVisible(); // the Icon logo, not a text glyph
+  await expect(mark.locator("img")).toBeVisible(); // the packaged PAVii logo, not a text glyph
   await expect(mark).not.toContainText("✦");
   await expect(page.getByText(/Starting PAVii|Restoring your session/)).toBeVisible();
 });

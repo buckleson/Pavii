@@ -105,9 +105,57 @@ jobs:
             surfaces/gui/src-tauri/target/release/bundle/dmg/*
             surfaces/gui/src-tauri/target/release/bundle/macos/*.tar.gz*
 
+  linux-x64:
+    name: Linux x64
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: surfaces/gui/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install Linux build deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            clang libclang-dev libwebkit2gtk-4.1-dev libgtk-3-dev \
+            libayatana-appindicator3-dev librsvg2-dev patchelf libssl-dev rpm
+      - name: Install Python build deps
+        run: |
+          python3 -m venv .venv
+          .venv/bin/python -m pip install --upgrade pip
+          .venv/bin/pip install -e ".[bedrock]" pyinstaller tzdata typer
+      - name: Install GUI deps
+        working-directory: surfaces/gui
+        run: npm ci
+      - name: Prepare updater signing key
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+        run: |
+          key_path="$RUNNER_TEMP/pavii-updater.key"
+          printf '%s' "$TAURI_SIGNING_PRIVATE_KEY" > "$key_path"
+          echo "TAURI_SIGNING_PRIVATE_KEY=$key_path" >> "$GITHUB_ENV"
+      - name: Build Linux packages
+        env:
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: bash ./packaging/build_linux.sh
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pavii-linux-x64
+          path: |
+            surfaces/gui/src-tauri/target/release/bundle/appimage/*
+            surfaces/gui/src-tauri/target/release/bundle/deb/*
+            surfaces/gui/src-tauri/target/release/bundle/rpm/*
+
   publish-release:
     name: Publish release + updater manifest
-    needs: [windows-x64, macos-arm64]
+    needs: [windows-x64, macos-arm64, linux-x64]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -163,10 +211,11 @@ jobs:
 
           windows = one("PAVii_*_x64-setup.exe")
           macos = one("*.app.tar.gz")
+          linux = one("*.AppImage.tar.gz")
 
           latest = {
               "version": version,
-              "notes": "PAVii Phase 1 release. macOS DMG may be unsigned/not notarized unless Apple signing secrets were supplied.",
+              "notes": "PAVii Phase 1 release. macOS DMG may be unsigned/not notarized unless Apple signing secrets were supplied. Linux packages are native unsigned builds with signed updater bundles.",
               "pub_date": datetime.datetime.now(datetime.UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
               "platforms": {
                   "windows-x86_64": {
@@ -176,6 +225,10 @@ jobs:
                   "darwin-aarch64": {
                       "signature": signature_for(macos),
                       "url": f"{base_url}/{macos.name}",
+                  },
+                  "linux-x86_64": {
+                      "signature": signature_for(linux),
+                      "url": f"{base_url}/{linux.name}",
                   },
               },
           }
@@ -187,7 +240,7 @@ jobs:
           RELEASE_TAG: ${{ steps.release.outputs.tag }}
         shell: bash
         run: |
-          notes="PAVii release ${RELEASE_TAG}. macOS DMG is unsigned/not notarized unless Apple signing secrets were supplied."
+          notes="PAVii release ${RELEASE_TAG}. macOS DMG is unsigned/not notarized unless Apple signing secrets were supplied. Linux packages are native unsigned builds with signed updater bundles."
           mapfile -t files < <(find release-artifacts -type f | sort)
           files+=(latest.json)
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then

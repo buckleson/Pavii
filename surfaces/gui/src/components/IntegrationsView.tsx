@@ -70,7 +70,7 @@ export function IntegrationsView() {
             <section>
               <PanelHead
                 title="Connectors"
-                sub="Apps and tools your coworkers can use. Connected ones come first."
+                sub="Apps and tools PAVii can use. Connected ones come first."
               />
               <ConnectorsSection />
             </section>

@@ -1640,7 +1640,7 @@ export interface SlackMember {
 }
 
 // One channel from the workspace roster. Private channels appear only where the
-// bot is a member (Slack API constraint); is_member=false → "invite @PAVii" hint.
+// bot is a member (Slack API constraint); is_member=false → "invite @Pavii" hint.
 export interface SlackChannelEntry {
   id: string;
   name: string;

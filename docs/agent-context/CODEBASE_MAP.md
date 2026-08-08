@@ -9,7 +9,7 @@ Main surfaces:
 - `surfaces/gui/src`: React, TypeScript, Vite, Tailwind desktop UI.
 - `surfaces/gui/src-tauri`: Tauri 2 Rust shell, native window/tray/menu, updater config, icons.
 - `coworker`: bundled Python/FastAPI sidecar, local sessions, personas, connectors, automations, tools.
-- `packaging`: Windows and macOS desktop packaging scripts plus updater manifest helper.
+- `packaging`: Windows, macOS, and Linux desktop packaging scripts plus updater manifest helper.
 - `tests` and `surfaces/gui/src/**/*.test.*`: pytest and Vitest regression coverage.
 
 Phase 1 boundaries:
@@ -19,3 +19,5 @@ Phase 1 boundaries:
 - New default conversation workspace is `~/PAVii`; saved user paths are not migrated.
 - OpenWorker Cloud account and Persona Gallery UI/routes are removed.
 - Connector-auth internals that still use cloud/broker naming remain only where connector OAuth depends on them.
+- Platform shortcuts are centralized in `surfaces/gui/src/shortcuts.ts`: macOS uses Command labels/handlers, Windows and Linux use Ctrl labels/handlers.
+- PAVii connector display identity is code-level only; external Slack/GitHub app display names must also be changed in their provider dashboards where the provider owns the shown bot/app name.

@@ -32,7 +32,7 @@ test("the account menu: Inbox + Connectors always listed; Settings carries the s
   const menu = page.getByTestId("account-menu");
   await expect(menu.getByRole("button", { name: "Inbox" })).toBeVisible();
   await expect(menu.getByRole("button", { name: "Connectors", exact: true })).toBeVisible();
-  await expect(menu.getByRole("button", { name: /Settings/ })).toContainText("⌘");
+  await expect(menu.getByRole("button", { name: /Settings/ })).toContainText("Ctrl+S");
   await expect(menu.getByRole("button", { name: "Automations", exact: true })).toBeVisible();
   await expect(menu.getByRole("button", { name: "Activity", exact: true })).toBeVisible();
 });

@@ -102,7 +102,7 @@ export function SlackDetail({ c, cloud, slack, onChanged }: DetailProps) {
       {!c.connected && (
         <div className={GRP}>
           <div className={ROW + " text-[12.5px] text-muted"}>
-            One @ocw app, installed per workspace — each keeps its own allow-list.
+            One @Pavii app, installed per workspace — each keeps its own allow-list.
             {cloud?.signed_in ? "" : " One-click needs cloud sign-in; Manual works without it."}
           </div>
         </div>
@@ -221,7 +221,7 @@ function WorkspaceGroup({
           <>
             <div className={ROW}>
               <span className="min-w-0 flex-1 text-[12.5px] text-muted flex items-center gap-2 flex-wrap">
-                <span>No one allowed yet — mentions of the bot show up here for your OK.</span>
+                <span>No one allowed yet — @Pavii mentions show up here for your OK.</span>
                 <PersonPicker teamId={w.team_id} allowed={[]} onChanged={onChanged} />
               </span>
               <DisconnectBtn teamId={w.team_id} busy={busy} onClick={disconnect} />

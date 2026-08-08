@@ -146,7 +146,7 @@ export function InboxView({
         <div className="max-w-4xl mx-auto px-7 py-6">
           <PanelHead
             title="Inbox"
-            sub="Approvals, questions, and notifications from your coworkers — including sessions running unattended."
+            sub="Approvals, questions, and notifications from PAVii — including sessions running unattended."
           />
 
           <div className="flex gap-5 border-b border-line mb-4">
@@ -225,7 +225,7 @@ export function InboxView({
                       className={CHIP(personaFilter === "all")}
                       onClick={() => setPersonaFilter("all")}
                     >
-                      All coworkers
+                      All assistants
                     </button>
                     {personasWithItems.map((p) => (
                       <button

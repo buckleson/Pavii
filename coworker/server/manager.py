@@ -3010,7 +3010,7 @@ class SessionManager:
 
     # -- mention router (§31) ----------------------------------------------------
     async def _route_mention(self, event, ms: MessageSource, subs) -> None:
-        """@PAVii tagged in a channel. A subscribed (user-connected) coworker owns the channel
+        """@Pavii tagged in a channel. A subscribed (user-connected) coworker owns the channel
         and must answer; otherwise the per-thread coworker session handles it — spawned on the
         first tag, steered by follow-ups (deduped on the thread target)."""
         from ..connectors.base import format_target

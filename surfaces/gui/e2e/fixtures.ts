@@ -58,10 +58,10 @@ const PERSONAS = {
     { id: "cowork", name: "PAVii", icon: "cowork", tagline: "Produce a deliverable — research, analysis, scripts", needs_workspace: true, builtin: true, family: "knowledge", workspace: "deliverable", tools: ["files", "search"], enabled: true, surfaced: true, default: true },
     { id: "code", name: "Code", icon: "code", tagline: "Work in a codebase — files, git, shell", needs_workspace: true, builtin: true, family: "code", workspace: "git", tools: ["code_files", "git"], enabled: true, surfaced: true, default: false },
     { id: "chat", name: "Chat", icon: "chat", tagline: "Quick questions — no workspace", needs_workspace: false, builtin: true, family: "knowledge", workspace: "none", tools: [], enabled: true, surfaced: false, default: false },
-    { id: "ops", name: "Ops Coworker", icon: "wrench", tagline: "Operate and investigate — runbooks, logs, infrastructure", needs_workspace: true, builtin: true, family: "knowledge", workspace: "deliverable", tools: ["files", "shell"], enabled: true, surfaced: true, default: false },
+    { id: "ops", name: "Ops PAVii", icon: "wrench", tagline: "Operate and investigate — runbooks, logs, infrastructure", needs_workspace: true, builtin: true, family: "knowledge", workspace: "deliverable", tools: ["files", "shell"], enabled: true, surfaced: true, default: false },
     // A non-builtin install (disabled pending consent — invisible to picker specs) so the
     // Personas page's delete/enable affordances have a target.
-    { id: "acme-notes", name: "Acme Notes", icon: "pencil", tagline: "Acme's note-taking coworker", needs_workspace: true, builtin: false, family: "knowledge", workspace: "deliverable", tools: ["files"], enabled: false, surfaced: false, default: false },
+    { id: "acme-notes", name: "Acme Notes", icon: "pencil", tagline: "Acme's note-taking PAVii assistant", needs_workspace: true, builtin: false, family: "knowledge", workspace: "deliverable", tools: ["files"], enabled: false, surfaced: false, default: false },
   ],
 };
 
@@ -217,10 +217,10 @@ const GALLERY_PERSONAS = [
   {
     slug: "sales",
     version: 1,
-    name: "Sales Coworker",
+    name: "Sales PAVii",
     icon: "chart",
     tagline: "Research accounts, prep meetings, draft follow-ups",
-    description: "A sales-focused coworker.",
+    description: "A sales-focused PAVii assistant.",
     family: "knowledge",
     workspace: "deliverable",
     publisher: "PAVii",
@@ -234,7 +234,7 @@ const GALLERY_PERSONAS = [
     name: "Recruiter",
     icon: "search",
     tagline: "Sourcing summaries and scheduling loops",
-    description: "A recruiting coworker.",
+    description: "A recruiting PAVii assistant.",
     family: "knowledge",
     workspace: "deliverable",
     publisher: "PAVii",
@@ -385,7 +385,7 @@ export async function mockApi(page: import("@playwright/test").Page) {
   // GitHub — PER-TEST multi-installation state (managed relay, one installation +
   // one parked mention) mirroring the backend's github:install:<id> profiles.
   const githubParked: any[] = [
-    { id: "gh-pk1", platform: "github", chat_id: "acme/site#7", chat_name: "acme/site#7", user_id: "maya-dev", user_name: "maya-dev", chat_type: "channel", text: "@ocw please take a look at this flaky test", ts: Date.now() / 1000 - 90, team_id: "101" },
+    { id: "gh-pk1", platform: "github", chat_id: "acme/site#7", chat_name: "acme/site#7", user_id: "maya-dev", user_name: "maya-dev", chat_type: "channel", text: "@Pavii please take a look at this flaky test", ts: Date.now() / 1000 - 90, team_id: "101" },
   ];
   const githubState = {
     connected: true,
@@ -395,7 +395,7 @@ export async function mockApi(page: import("@playwright/test").Page) {
     ],
   };
   const githubConnector = () => ({
-    name: "github", title: "GitHub", icon: "⌘", blurb: "Work with issues, pull requests, repository files, and CI status.",
+    name: "github", title: "GitHub", icon: "◇", blurb: "Work with issues, pull requests, repository files, and CI status.",
     auth: "token", two_way: true, channels: false, available: true, brand_color: "#1f2328", logo: "github",
     fields: [{ key: "token", label: "Personal access token", secret: true, required: true, help: "", placeholder: "" }],
     instructions: [], connected: githubState.connected,
@@ -605,7 +605,7 @@ export async function mockApi(page: import("@playwright/test").Page) {
           send("permission_required", {
             name: "run_shell",
             arguments: { command: "ls" },
-            reason: "The coworker wants to run a command.",
+            reason: "PAVii wants to run a command.",
           });
           return; // suspended on the approval
         }

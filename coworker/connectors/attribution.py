@@ -1,7 +1,7 @@
 """Sender attribution for outbound Slack posts (P1, 2026-07-14).
 
 Multiple people can run PAVii into the same channel, and every one of their
-posts arrives as the same @ocw bot. The managed OAuth install already records WHO
+posts arrives as the same @Pavii bot. The managed OAuth install already records WHO
 connected each workspace — Slack's `authed_user` — so outbound text carries
 "[<their name>] " per workspace: the member id rides the install form-POST into the
 `slack:team:<id>` profile, and the display name is resolved once via `users.info`

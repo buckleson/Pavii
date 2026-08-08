@@ -329,7 +329,7 @@ class SlackRelayAdapter(BasePlatformAdapter):
             return
         channel = mapped.source.chat_id  # bare channel id before qualification
         # Resolve friendly names with THIS workspace's bot token (cached per team),
-        # mirroring the Socket-Mode adapter — so cards read "@PAVii"/"Rohit"/"#ocw-test"
+        # mirroring the Socket-Mode adapter — so cards read "@Pavii"/"Rohit"/"#ocw-test"
         # not raw U…/C… ids. Best-effort: ids fall through on failure.
         if not mapped.source.user_name:
             mapped.source.user_name = await self._display_name(
@@ -406,8 +406,9 @@ class SlackRelayAdapter(BasePlatformAdapter):
         if not token:
             return None
         base = os.environ.get("SLACK_API_URL", "https://slack.com/api/")
+        timeout = float(os.environ.get("SLACK_API_TIMEOUT", "0.5"))
         try:
-            async with httpx.AsyncClient(timeout=15) as http:
+            async with httpx.AsyncClient(timeout=timeout) as http:
                 resp = await http.get(
                     base + method,
                     params=params,
@@ -424,6 +425,9 @@ class SlackRelayAdapter(BasePlatformAdapter):
             return None
         cache = self._names.setdefault(team_id, {})
         if uid in cache:
+            return cache[uid]
+        if uid == self._bot_user_id(team_id):
+            cache[uid] = "Pavii"
             return cache[uid]
         data = await self._slack_get(team_id, "users.info", {"user": uid})
         u = (data or {}).get("user") or {}

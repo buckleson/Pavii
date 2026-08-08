@@ -10,7 +10,7 @@ import {
 
 // Auto-update prompt (desktop shell only — the browser build never renders this).
 // Deliberately a PROMPT, not a silent background install: swapping the app under a
-// user mid-session would kill their running coworker turn, and quiet self-mutation
+// user mid-session would kill their running PAVii turn, and quiet self-mutation
 // sits badly with the local-first trust posture. "Later" dismisses that VERSION for
 // this app run; long-lived instances still hear about the next release because the
 // check repeats every 30 minutes (FB-001 — the app can sit open for weeks).

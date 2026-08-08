@@ -48,12 +48,12 @@ test("disabling a persona with conversations asks first, then archives them", as
 }) => {
   await page.goto("/");
   const sidebar = page.locator(".sidebar");
-  await expect(sidebar.getByText("Ops", { exact: true })).toBeVisible();
+  await expect(sidebar.getByText("Ops PAVii", { exact: true })).toBeVisible();
 
   await page.getByTestId("account-row").click();
   await page.getByRole("button", { name: "Settings", exact: true }).click();
   await page.getByRole("button", { name: "Personas", exact: true }).click();
-  const row = page.locator(".divide-y > div").filter({ hasText: "Ops Coworker" });
+  const row = page.locator(".divide-y > div").filter({ hasText: "Ops PAVii" });
   const enabled = row.getByRole("checkbox", { name: "Enabled" });
 
   // Unchecking only ARMS the confirm — the flag must not flip yet.
@@ -71,7 +71,7 @@ test("disabling a persona with conversations asks first, then archives them", as
   await enabled.click();
   await page.getByTestId("persona-disable-confirm-ops").click();
   await expect(enabled).not.toBeChecked();
-  await expect(sidebar.getByText("Ops", { exact: true })).toHaveCount(0);
+  await expect(sidebar.getByText("Ops PAVii", { exact: true })).toHaveCount(0);
 });
 
 test("disabling a persona with no conversations skips the confirm", async ({ page }) => {

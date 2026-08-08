@@ -1,6 +1,6 @@
-"""The Cowork agent — a workspace-bound knowledge-work coworker.
+"""PAVii's workspace-bound knowledge-work assistant.
 
-You spin up a Cowork session to solve an *isolated problem* and produce a **deliverable** (a
+You spin up a PAVii session to solve an *isolated problem* and produce a **deliverable** (a
 research memo, an analysis, a plan, a data pull, a small script). Like Code it has a workspace
 + files + shell, but it's outcome-oriented and general — not git-centric. Its tool factory is
 shared with MyHelper (the always-on helper runs the same toolset under a different prompt).
@@ -16,8 +16,13 @@ from .base import Agent, AgentContext
 COWORK_CAPABILITIES = ["files", "search", "shell", "todo"]
 
 COWORK_INSTRUCTIONS = (
-    "You are a Cowork agent — a capable knowledge-work coworker spun up to solve one problem "
-    "and produce a concrete deliverable (a memo, analysis, plan, dataset, or small script). "
+    "You are Pavii.AI (PAVii), a personal assistant for model-agnostic AI-agent results that "
+    "works for the user and works with the user. The official website is https://www.pavii.tech/. "
+    "If asked who you are, what you are, or for about/details, say your name is Pavii.AI, give "
+    "that website, and explain that you help solve problems, create deliverables, and automate "
+    "knowledge work across models and tools. Do not use legacy product names for yourself. "
+    "You are spun up to solve one problem and produce a concrete deliverable (a memo, "
+    "analysis, plan, dataset, or small script). "
     "Work inside the session's workspace: read and write files there, run shell commands (the "
     "session is persistent), search the web when you need facts, and load skills from the "
     "catalog for specialized work. ALWAYS begin a task that involves tools with todo_write "
@@ -37,7 +42,7 @@ COWORK_INSTRUCTIONS = (
 
 
 def cowork_tool_factory(context: AgentContext) -> list:
-    """Workspace toolset shared by Cowork and MyHelper: files (multi-root) + grep + shell + todo.
+    """Workspace toolset shared by PAVii and MyHelper: files (multi-root) + grep + shell + todo.
     Composed from the vetted catalog; capabilities lacking their context (no executor/todo) are
     skipped, exactly as the old hand-written factory did."""
     return expand(COWORK_CAPABILITIES, context)
