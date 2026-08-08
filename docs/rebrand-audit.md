@@ -9,6 +9,7 @@ Audit date: 2026-08-08.
 - The updater endpoint is `https://github.com/buckleson/Pavii/releases/latest/download/latest.json`.
 - `latest.json` contains signed updater entries for `windows-x86_64`, `darwin-aarch64`, and `linux-x86_64`.
 - External dashboard rebrand work is documented in `docs/external-connector-rebrand.md`.
+- PAVii connector relay sign-in is restored for one-click connector installs; old Persona Gallery/product gallery routes remain removed.
 
 ## Retained compatibility/internal names
 
@@ -43,7 +44,7 @@ Docs intentionally mention OpenWorker/OCW when describing:
 
 - the original source tree name;
 - retained compatibility identifiers;
-- removed cloud/account/gallery surfaces;
+- restored PAVii connector relay sign-in, removed gallery surfaces;
 - legacy updater continuity limits;
 - external dashboard values that must be replaced manually.
 
@@ -59,6 +60,12 @@ High-priority external surfaces:
 - GitHub App install/profile/bot identity
 - Google OAuth consent branding for Gmail/Calendar/Drive
 - Microsoft Entra OAuth consent branding for Outlook
+
+Browser-control findings on 2026-08-08:
+
+- Slack API Apps page requires Slack sign-in before any app can be edited.
+- GitHub personal Developer Settings is signed in as Buckleson Group but shows no GitHub Apps; the connector app is likely owned by another account/org or must be created/migrated separately.
+- `api.pavii.tech` and `api.pavii.ai` did not resolve; the currently reachable connector broker remains `https://api.openworker.com`.
 
 ## Unresolved user-visible code issues
 

@@ -1,7 +1,8 @@
-"""Sidecar loopback routes after Phase 1 account/gallery removal.
+"""Sidecar loopback routes for PAVii connector relay and gallery removal.
 
-PAVii keeps local connector OAuth callbacks and signed-out local operation, but
-the old product account and cloud gallery routes must remain unreachable.
+PAVii keeps local connector OAuth callbacks, signed-out local operation, and a
+PAVii-branded connector relay sign-in. The old product gallery routes must
+remain unreachable.
 """
 
 from __future__ import annotations
@@ -28,9 +29,27 @@ def client(tmp_path, monkeypatch):
         yield c
 
 
-def test_product_account_cloud_routes_are_removed(client):
-    assert client.get("/v1/cloud/status").status_code == 404
-    assert client.post("/v1/cloud/telemetry", json={"enabled": False}).status_code == 404
+def test_connector_relay_sign_in_routes_are_branded_and_gallery_removed(client, monkeypatch):
+    opened: list[str] = []
+    monkeypatch.setattr("webbrowser.open", lambda url: opened.append(url))
+
+    status = client.get("/v1/cloud/status")
+    assert status.status_code == 200
+    assert status.json()["signed_in"] is False
+
+    telemetry = client.post("/v1/cloud/telemetry", json={"enabled": False})
+    assert telemetry.status_code == 200
+    assert telemetry.json()["telemetry_enabled"] is False
+
+    login = client.post("/v1/cloud/login")
+    assert login.status_code == 200
+    assert login.json()["ok"] is True
+    assert opened and "opencoworker.us.auth0.com" in opened[0]
+
+    callback = client.get("/v1/auth/callback", params={"error": "access_denied"})
+    assert callback.status_code == 400
+    assert "PAVii connector relay sign-in" in callback.text
+
     assert client.get("/v1/cloud/gallery").status_code == 404
     assert client.get("/auth/callback", params={"code": "c", "state": "s"}).status_code == 404
 

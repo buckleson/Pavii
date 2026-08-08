@@ -44,8 +44,8 @@ Changing those can break connector installs, callbacks, webhooks, or existing us
 
 | Connector | Dashboard updated | Logo updated | Consent/install checked | Bot/sender checked | Needs new app? | Notes |
 |---|---:|---:|---:|---:|---:|---|
-| Slack | ☐ | ☐ | ☐ | ☐ | ☐ | Update Slack API app, App Home bot display, and reinstall test workspace if cached. |
-| GitHub | ☐ | ☐ | ☐ | ☐ | ☐ | Update GitHub App branding; generated bot username may require a new app if it cannot be renamed. |
+| Slack | ☐ | ☐ | ☐ | ☐ | ☐ | Browser check reached Slack API Apps but requires Slack sign-in before app settings are visible. Update Slack API app, App Home bot display, and reinstall test workspace if cached. |
+| GitHub | ☐ | ☐ | ☐ | ☐ | ☐ | Browser check reached GitHub Developer Settings as Buckleson Group; personal settings show no GitHub Apps and the guessed `buckleson` org settings URL is not accessible. Locate the owning account/org or create a new PAVii GitHub App in a separate credential migration. |
 | Google OAuth | ☐ | ☐ | ☐ | n/a | ☐ | Covers Gmail, Calendar, and Drive; may trigger Google verification. |
 | Microsoft OAuth | ☐ | ☐ | ☐ | n/a | ☐ | Covers Outlook mail/calendar through Microsoft Entra app registration. |
 | HubSpot | ☐ | ☐ | ☐ | n/a | ☐ | Update developer app and marketplace/install copy if present. |
@@ -60,6 +60,18 @@ Changing those can break connector installs, callbacks, webhooks, or existing us
 | Telegram | ☐ | ☐ | n/a | ☐ | ☐ | Use BotFather for name, photo, description/about, and username if available. |
 | Discord | ☐ | ☐ | ☐ | ☐ | ☐ | Update developer app, bot username/avatar, and install page. |
 | WhatsApp / Meta | ☐ | ☐ | ☐ | ☐ | ☐ | Update Meta app/business profile, photo, description, and website. |
+
+## One-click relay status
+
+The desktop app now exposes PAVii-branded connector relay sign-in for managed one-click connectors. This restores the user-facing one-click entry point without reintroducing the removed Persona Gallery.
+
+The current desktop defaults still point at the legacy compatible broker identifiers:
+
+- API broker: `https://api.openworker.com`
+- Auth tenant: `opencoworker.us.auth0.com`
+- Relay WebSocket path includes `/ocw-connect`
+
+These are compatibility identifiers and may still show legacy branding in provider-owned sign-in surfaces until their dashboards/backends are rebranded or replaced. `api.pavii.tech` and `api.pavii.ai` did not resolve during the 2026-08-08 check, so a fully PAVii-owned broker cutover is still a separate infrastructure task.
 
 ## Recommended order
 

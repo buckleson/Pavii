@@ -77,8 +77,8 @@ class ConnectorDescriptor:
     # (connectors/experimental/) that release builds exclude entirely.
     experimental: bool = False
     risk_notice: str = ""
-    # One-click managed OAuth via the connector relay. Product account sign-in UI
-    # is removed in PAVii Phase 1; manual/local connector auth remains available.
+    # One-click managed OAuth via the optional PAVii connector relay. Manual/local
+    # connector auth remains available without relay sign-in.
     # Manual token paste ALWAYS remains available — signed out or in — managed
     # is an extra path, never a replacement (local-only open-source flow is
     # sacred).

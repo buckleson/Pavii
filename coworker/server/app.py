@@ -184,6 +184,7 @@ def create_app(manager: SessionManager) -> FastAPI:
     api_token = os.environ.get("COWORKER_API_TOKEN", "")
     tokenless_paths = {
         "/v1/health",
+        "/v1/auth/callback",
         "/mcp/oauth/callback",
         "/oauth/callback",
     }
@@ -944,7 +945,93 @@ def create_app(manager: SessionManager) -> FastAPI:
         # Resolve a parked unauthorized message: dismiss / allow / allow_deliver (§19).
         action = str((body or {}).get("action", "")).strip()
         return await manager.resolve_unauthorized(name, item_id, action)
-    # -- Managed connector OAuth. Product account sign-in routes were removed for PAVii Phase 1.
+    # -- PAVii connector relay sign-in + managed connector OAuth -----------------
+
+    @app.get("/v1/cloud/status")
+    def cloud_status() -> dict[str, Any]:
+        from .. import cloud
+
+        out = cloud.status(manager.secrets)
+        out["telemetry_enabled"] = cloud.telemetry_enabled(manager.secrets)
+        return out
+
+    @app.post("/v1/cloud/login")
+    async def cloud_login() -> dict[str, Any]:
+        """Start the optional PAVii connector relay sign-in in the system browser."""
+        import webbrowser
+
+        from .. import cloud
+        from ..config import load_config
+
+        out = await asyncio.to_thread(lambda: cloud.begin_login(load_config()))
+        if out.get("authorize_url"):
+            webbrowser.open(out["authorize_url"])
+        return {"ok": bool(out.get("authorize_url")), **out}
+
+    @app.get("/v1/auth/callback")
+    async def cloud_auth_callback(code: str = "", state: str = "", error: str = "") -> Any:
+        from fastapi.responses import HTMLResponse
+
+        from .. import cloud
+        from ..config import load_config
+
+        if error:
+            return HTMLResponse(
+                _browser_page(
+                    "Sign-in failed",
+                    "PAVii connector relay sign-in did not complete. Return to PAVii and try again.",
+                    ok=False,
+                    error=error,
+                ),
+                status_code=400,
+            )
+        if not code or not state:
+            return HTMLResponse(
+                _browser_page(
+                    "Sign-in failed",
+                    "The provider did not return the information PAVii needs to finish sign-in.",
+                    ok=False,
+                    error="missing code or state",
+                ),
+                status_code=400,
+            )
+        out = await asyncio.to_thread(
+            lambda: cloud.complete_login(manager.secrets, load_config(), code, state)
+        )
+        if not out.get("ok"):
+            return HTMLResponse(
+                _browser_page(
+                    "Sign-in failed",
+                    "PAVii connector relay sign-in did not complete. Return to PAVii and try again.",
+                    ok=False,
+                    error=out.get("error", ""),
+                ),
+                status_code=400,
+            )
+        asyncio.create_task(
+            asyncio.to_thread(lambda: cloud.sync_connections(manager.secrets, load_config()))
+        )
+        return HTMLResponse(
+            _browser_page(
+                "Signed in",
+                "PAVii connector relay is ready. You can close this tab and return to PAVii.",
+                ok=True,
+            )
+        )
+
+    @app.post("/v1/cloud/logout")
+    def cloud_logout() -> dict[str, Any]:
+        from .. import cloud
+
+        return cloud.logout(manager.secrets)
+
+    @app.post("/v1/cloud/telemetry")
+    def cloud_telemetry(body: dict) -> dict[str, Any]:
+        from .. import cloud
+
+        return cloud.set_telemetry_enabled(
+            manager.secrets, bool((body or {}).get("enabled", True))
+        )
 
     @app.post("/v1/connectors/{name}/connect-managed")
     async def connector_connect_managed(

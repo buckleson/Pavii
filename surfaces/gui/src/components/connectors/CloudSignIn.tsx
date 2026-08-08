@@ -26,10 +26,10 @@ export function CloudSignInInline({ blurb }: { blurb?: string }) {
           });
         }}
       >
-        {waiting ? "Check your browser…" : "Cloud sign-in removed in PAVii Phase 1"}
+        {waiting ? "Check your browser…" : "Sign in to PAVii connector relay"}
       </button>
       <div className="text-[11.5px] text-faint">
-        {blurb || "Sign-in unlocks one-click connects — or switch to Manual, which works without it."}
+        {blurb || "PAVii connector relay unlocks one-click connects — or switch to Manual, which works without it."}
       </div>
     </div>
   );
@@ -44,7 +44,7 @@ export function CloudStatusPending() {
       className="text-[12px] text-faint py-2 text-center"
       data-testid="cloud-status-pending"
     >
-      Checking PAVii Phase 1 sign-in…
+      Checking PAVii connector relay…
     </div>
   );
 }

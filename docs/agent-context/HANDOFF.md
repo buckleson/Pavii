@@ -8,7 +8,7 @@
 - Fresh default workspaces use `~/PAVii`.
 - Sidebar product account row was replaced with a local app menu.
 - Persona Gallery UI and backend gallery routes were removed.
-- `/v1/cloud/status`, `/v1/cloud/login`, `/v1/cloud/logout`, `/v1/cloud/telemetry`, and cloud gallery routes were removed from the sidecar.
+- PAVii connector relay sign-in is enabled for managed one-click connector installs through `/v1/cloud/status`, `/v1/cloud/login`, `/v1/cloud/logout`, `/v1/cloud/telemetry`, and `/v1/auth/callback`.
 - Release workflow added at `.github/workflows/release.yml`.
 - Search/settings/sidebar shortcuts now render and behave per-platform: macOS uses Command, Windows/Linux use Ctrl.
 - Assistant identity prompts now introduce `Pavii.AI`, website `https://www.pavii.tech/`, as a model-agnostic personal assistant.
@@ -23,7 +23,8 @@
 - Backend pytest subset passed: 54 passed, 1 Starlette/httpx deprecation warning.
 - `npm run build` passed in `surfaces/gui`.
 - `npm test -- --run` passed: 108 passed.
-- `npx playwright test` passed: 132 passed, 33 skipped for removed cloud/gallery/relay-only flows.
+- `npx playwright test` passed after connector relay sign-in restoration: 132 passed, 33 skipped for gallery/relay-only flows.
+- After connector relay sign-in restoration: `pytest tests/test_cloud.py tests/test_cloud_server.py -q` passed, `npm run build` passed, and `npm test -- --run` passed.
 - `cargo check` passed after setting `LIBCLANG_PATH` to the project-local LLVM toolcache.
 - Windows packaging passed with updater signatures.
 
@@ -47,5 +48,5 @@ Local Windows EXE smoke launch from the non-interactive shell returned immediate
 ## Still To Do
 
 - Run real installed-app checks on Windows, macOS, and Linux package artifacts.
-- Complete external provider dashboard rebrands tracked in `docs/external-connector-rebrand.md`.
+- Complete external provider dashboard rebrands tracked in `docs/external-connector-rebrand.md`; Slack currently requires Slack API sign-in, and the visible GitHub account has no editable GitHub Apps under personal settings.
 - Add Apple notarization and Windows/Linux package signing credentials later if distributable signed packages are required.

@@ -469,9 +469,9 @@ export interface Connector {
   installations?: GithubInstallation[]; // GitHub only: App installations (managed relay)
 }
 
-// --- Legacy cloud account shape ------------------------------------------------
-// Phase 1 removes the product account/gallery surface. Some connector components
-// still accept a CloudStatus value while manual/local auth remains the default.
+// --- PAVii connector relay account shape --------------------------------------
+// Optional sign-in for managed one-click connector installs. Manual/local auth remains
+// available without this account.
 
 export interface CloudStatus {
   signed_in: boolean;
@@ -484,24 +484,60 @@ export interface CloudStatus {
 export async function setCloudTelemetry(
   enabled: boolean,
 ): Promise<{ ok: boolean; telemetry_enabled?: boolean }> {
-  return { ok: true, telemetry_enabled: enabled };
+  const res = await fetch(`${httpBase()}/v1/cloud/telemetry`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ enabled }),
+  });
+  return res.json();
 }
 
 export async function getCloudStatus(): Promise<CloudStatus> {
-  return { signed_in: false, account: "", user_id: "", telemetry_enabled: false };
+  const res = await fetch(`${httpBase()}/v1/cloud/status`);
+  return res.json();
 }
 
 export async function cloudLogin(): Promise<{ ok: boolean; error?: string }> {
-  return { ok: false, error: "PAVii account sign-in was removed in Phase 1." };
+  const res = await fetch(`${httpBase()}/v1/cloud/login`, { method: "POST" });
+  return res.json();
 }
 
 export function waitForCloudSignIn(onDone: (s: CloudStatus | null) => void): () => void {
-  onDone(null);
-  return () => {};
+  let stopped = false;
+  let tries = 0;
+  const tick = async () => {
+    if (stopped) return;
+    tries += 1;
+    try {
+      const status = await getCloudStatus();
+      if (status.signed_in) {
+        onDone(status);
+        stopped = true;
+        clearInterval(timer);
+      } else if (tries >= 120) {
+        onDone(status);
+        stopped = true;
+        clearInterval(timer);
+      }
+    } catch {
+      if (tries >= 120) {
+        onDone(null);
+        stopped = true;
+        clearInterval(timer);
+      }
+    }
+  };
+  const timer = window.setInterval(tick, 1500);
+  void tick();
+  return () => {
+    stopped = true;
+    clearInterval(timer);
+  };
 }
 
 export async function cloudLogout(): Promise<{ ok: boolean }> {
-  return { ok: true };
+  const res = await fetch(`${httpBase()}/v1/cloud/logout`, { method: "POST" });
+  return res.json();
 }
 
 export async function connectManaged(
