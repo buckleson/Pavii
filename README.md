@@ -56,14 +56,49 @@ Bring the model that fits the task:
 
 The app keeps model configuration flexible so your agents can move with the model ecosystem instead of being trapped by it.
 
-## What PAVii can do
+## Features
 
-- Produce documents, reports, summaries, spreadsheets, and other deliverables.
-- Help with coding tasks in a workspace.
-- Search, inspect, and synthesize information from files and connected services.
-- Work with Slack or GitHub mentions through PAVii connector flows.
-- Run automations such as daily briefs, recurring reports, or folder cleanup.
-- Keep long-running sessions understandable with progress, artifacts, and approvals.
+PAVii is not just a chat box. It is a desktop workspace for practical AI agents that can plan, use tools, ask for approval, and produce real outputs.
+
+### Agent workbench
+
+- Start focused sessions for research, writing, analysis, coding, operations, or general knowledge work.
+- Keep long-running tasks readable with progress updates, approval cards, artifacts, and activity history.
+- Attach files, point PAVii at approved folders, and let it work inside the context you choose.
+- Switch between supported model providers depending on speed, cost, context window, or task quality.
+
+### Local files and deliverables
+
+- Read, summarize, compare, and transform documents inside approved workspaces.
+- Create polished outputs such as memos, reports, markdown files, scripts, summaries, plans, checklists, and structured notes.
+- Help clean up folders, inspect project files, explain code, and make small implementation changes with approval.
+- Keep generated artifacts visible so you can review what was produced instead of digging through chat.
+
+### Coding and technical work
+
+- Inspect repositories, search code, explain architecture, and trace how parts of a project fit together.
+- Run terminal commands with your approval.
+- Help debug failures, update source files, run checks, and summarize what changed.
+- Support local-first development workflows without forcing your project into a hosted IDE.
+
+### Automations and inbox
+
+- Create recurring tasks such as morning briefs, weekly digests, folder cleanup, release checks, and status summaries.
+- Use an Inbox for approvals, questions, and unattended task handoffs.
+- Keep scheduled work transparent: PAVii shows what ran, what needs attention, and what output was produced.
+
+### Connectors and tools
+
+- Connect local/manual integrations for everyday tools such as Slack, GitHub, Gmail, calendars, email, CRMs, project trackers, and MCP servers.
+- Let PAVii use connected tools only within the permissions and approval rules you choose.
+- Keep hosted one-click connector relay visible as a coming-soon path while manual setup remains available today.
+- Preserve local/offline operation for core workflows.
+
+### Safety and control
+
+- Approval gates protect sensitive actions such as sending messages, modifying files, running commands, or changing external data.
+- Workspace access is explicit, so PAVii only sees folders you allow.
+- Model keys and connector credentials are stored locally unless you intentionally connect a provider or service that requires network access.
 
 ## Local-first privacy
 
