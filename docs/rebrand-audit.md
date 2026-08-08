@@ -5,7 +5,7 @@ Audit date: 2026-08-08.
 ## Current status
 
 - Root README is approved for publishing and contains PAVii download buttons.
-- GitHub Actions release workflow `31254295698` completed successfully before this audit and published `v0.1.7-dev.11`.
+- GitHub Actions release workflow `31254295698` completed successfully before this audit and published `v0.1.7-dev.11`; the next planned public release is `v2.0.0`.
 - The updater endpoint is `https://github.com/buckleson/Pavii/releases/latest/download/latest.json`.
 - `latest.json` contains signed updater entries for `windows-x86_64`, `darwin-aarch64`, and `linux-x86_64`.
 - External dashboard rebrand work is documented in `docs/external-connector-rebrand.md`.

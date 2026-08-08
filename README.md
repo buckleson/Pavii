@@ -11,9 +11,9 @@ PAVii turns chat into outcomes. Ask for a brief, a spreadsheet cleanup, a releas
 ## Download
 
 <p>
-  <a href="https://github.com/buckleson/Pavii/releases/latest/download/PAVii-Windows-x64-setup.exe"><img alt="Download for Windows" src="https://img.shields.io/badge/Download-Windows-6d28d9?style=for-the-badge&logo=windows&logoColor=white"></a>
-  <a href="https://github.com/buckleson/Pavii/releases/latest/download/PAVii-macOS-arm64.dmg"><img alt="Download for macOS" src="https://img.shields.io/badge/Download-macOS-111111?style=for-the-badge&logo=apple&logoColor=white"></a>
-  <a href="https://github.com/buckleson/Pavii/releases/latest/download/PAVii-Linux-x64.AppImage"><img alt="Download for Linux" src="https://img.shields.io/badge/Download-Linux-6d28d9?style=for-the-badge&logo=linux&logoColor=white"></a>
+  <a href="https://github.com/buckleson/Pavii/releases/latest/download/PAVii-Windows-x64-setup.exe"><img alt="Download PAVii 2.0 for Windows" src="https://img.shields.io/badge/PAVii_2.0-Windows-6d28d9?style=for-the-badge&logo=windows&logoColor=white"></a>
+  <a href="https://github.com/buckleson/Pavii/releases/latest/download/PAVii-macOS-arm64.dmg"><img alt="Download PAVii 2.0 for macOS" src="https://img.shields.io/badge/PAVii_2.0-macOS-111111?style=for-the-badge&logo=apple&logoColor=white"></a>
+  <a href="https://github.com/buckleson/Pavii/releases/latest/download/PAVii-Linux-x64.AppImage"><img alt="Download PAVii 2.0 for Linux" src="https://img.shields.io/badge/PAVii_2.0-Linux-6d28d9?style=for-the-badge&logo=linux&logoColor=white"></a>
 </p>
 
 Alternative packages:

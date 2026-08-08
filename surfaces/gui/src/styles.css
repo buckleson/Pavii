@@ -968,6 +968,7 @@ button.btn.sm.danger-btn:hover { border-color: var(--danger); }
 
 /* Desktop boot splash — shown while the Tauri sidecar server comes up. */
 .boot-splash {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -975,24 +976,55 @@ button.btn.sm.danger-btn:hover { border-color: var(--danger); }
   gap: 14px;
   height: 100vh;
   color: var(--ink);
-  background: var(--paper);
+  background:
+    radial-gradient(circle at 50% 46%, color-mix(in srgb, var(--accent) 14%, transparent) 0 70px, transparent 170px),
+    var(--paper);
+  overflow: hidden;
+}
+.titlebar-logo {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  flex: none;
+}
+.boot-orb {
+  position: absolute;
+  width: 92px;
+  height: 92px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, transparent);
+  box-shadow:
+    0 0 36px color-mix(in srgb, var(--accent) 20%, transparent),
+    inset 0 0 28px color-mix(in srgb, var(--accent) 10%, transparent);
+  animation: boot-orbit 2.4s linear infinite;
 }
 .boot-mark {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   opacity: 0.95;
-  animation: boot-pulse 1.4s ease-in-out infinite;
+  padding: 5px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--panel) 86%, transparent);
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.10),
+    0 0 0 1px color-mix(in srgb, var(--accent) 18%, transparent);
+  animation: boot-pulse 1.55s ease-in-out infinite;
 }
 .boot-mark img { width: 100%; height: 100%; object-fit: contain; }
 .boot-text {
   font-size: 14px;
-  opacity: 0.6;
+  opacity: 0.72;
 }
 @keyframes boot-pulse {
-  0%, 100% { opacity: 0.35; transform: scale(0.96); }
-  50% { opacity: 0.9; transform: scale(1.04); }
+  0%, 100% { opacity: 0.68; transform: scale(0.97); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+@keyframes boot-orbit {
+  from { transform: rotate(0deg) scale(0.98); opacity: 0.5; }
+  50% { opacity: 0.95; }
+  to { transform: rotate(360deg) scale(0.98); opacity: 0.5; }
 }
 
 /* Dev-only fake traffic lights (?overlay=1) at the SAME position the real app uses

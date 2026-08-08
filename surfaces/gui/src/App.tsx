@@ -1189,7 +1189,7 @@ export function App() {
         {overlay && (
           <div className="titlebar-drag" data-tauri-drag-region>
             <span className="titlebar-brand brand-wordmark">
-              <Icon name="logo" size={13} className="mark" /> PAVii<span className="beta-tag">BETA</span>
+              <img src={paviiLogo} alt="" className="titlebar-logo" /> PAVii<span className="beta-tag">BETA</span>
             </span>
           </div>
         )}
@@ -1198,8 +1198,8 @@ export function App() {
             <span /><span /><span />
           </div>
         )}
-        {/* The real PAVii mark, from the packaged app asset. */}
-        <div className="boot-mark">
+        <div className="boot-orb" aria-hidden="true" />
+        <div className="boot-mark" aria-label="PAVii is starting">
           <img src={paviiLogo} alt="PAVii" className="w-[38px] h-[38px] object-contain" />
         </div>
         <div className="boot-text">

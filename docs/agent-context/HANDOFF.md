@@ -14,8 +14,10 @@
 - Assistant identity prompts now introduce `Pavii.AI`, website `https://www.pavii.tech/`, as a model-agnostic personal assistant.
 - Slack/GitHub connector mention copy now uses `@Pavii`; external app dashboards may still need manual renaming.
 - Light and dark CSS tokens were remapped to the requested Violet Bloom / Vercel-inspired palettes.
-- Loading splash uses the packaged PAVii PNG logo.
+- Loading splash uses the packaged PAVii PNG logo with the refreshed 2.0 pulse animation.
 - Linux packaging script and release workflow support were added.
+- Windows NSIS installs now close running PAVii/OpenWorker GUI and sidecar processes before extraction to avoid locked bundled Python files during upgrades.
+- Desktop version is now `2.0.0`; the intended public release tag is `v2.0.0`.
 
 ## Verification
 
@@ -28,7 +30,7 @@
 - `cargo check` passed after setting `LIBCLANG_PATH` to the project-local LLVM toolcache.
 - Windows packaging passed with updater signatures.
 
-Generated Windows artifacts:
+Previous Windows artifacts:
 
 - `G:\pavii.ai\openworker\surfaces\gui\src-tauri\target\release\bundle\nsis\PAVii_0.1.7_x64-setup.exe`
 - `G:\pavii.ai\openworker\surfaces\gui\src-tauri\target\release\bundle\nsis\PAVii_0.1.7_x64-setup.exe.sig`
@@ -40,8 +42,8 @@ Local Windows EXE smoke launch from the non-interactive shell returned immediate
 ## Release Status
 
 - Tested non-README commits were pushed.
-- GitHub Actions release workflow `31251624562` completed successfully.
-- Release `v0.1.7-dev.9` contains Windows, macOS, Linux, updater signatures, and `latest.json`.
+- GitHub Actions release workflow `31251624562` completed successfully for the prior Phase 1 build.
+- Next release target is `v2.0.0`, with Windows, macOS, Linux, updater signatures, and `latest.json`.
 - `latest.json` includes `windows-x86_64`, `darwin-aarch64`, and `linux-x86_64`.
 - Root README publishing is now explicitly approved; nested README files remain local/unpublished unless separately requested.
 
