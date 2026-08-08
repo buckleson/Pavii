@@ -48,7 +48,7 @@ else
 fi
 
 pushd "$GUI" >/dev/null
-npm run tauri -- build -- --bundles appimage,deb,rpm "${UPDATER_ARGS[@]}"
+npm run tauri -- build --bundles appimage,deb,rpm "${UPDATER_ARGS[@]}"
 popd >/dev/null
 
 BUNDLE_DIR="$GUI/src-tauri/target/release/bundle"
