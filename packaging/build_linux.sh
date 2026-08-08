@@ -2,7 +2,7 @@
 # Build the Linux desktop app + Linux packages.
 #
 # Produces Tauri Linux bundles from the authoritative openworker source tree:
-#   - AppImage (plus signed updater .AppImage.tar.gz when the updater key is set)
+#   - AppImage (plus signed updater .AppImage.sig when the updater key is set)
 #   - deb
 #   - rpm
 #
@@ -54,4 +54,4 @@ popd >/dev/null
 BUNDLE_DIR="$GUI/src-tauri/target/release/bundle"
 echo
 echo "Done. Linux bundles under: $BUNDLE_DIR"
-find "$BUNDLE_DIR" -type f \( -name '*.AppImage' -o -name '*.AppImage.tar.gz' -o -name '*.AppImage.tar.gz.sig' -o -name '*.deb' -o -name '*.rpm' \) -print | sort
+find "$BUNDLE_DIR" -type f \( -name '*.AppImage' -o -name '*.AppImage.sig' -o -name '*.deb' -o -name '*.rpm' \) -print | sort

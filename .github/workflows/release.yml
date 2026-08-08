@@ -211,7 +211,7 @@ jobs:
 
           windows = one("PAVii_*_x64-setup.exe")
           macos = one("*.app.tar.gz")
-          linux = one("*.AppImage.tar.gz")
+          linux = one("*.AppImage")
 
           latest = {
               "version": version,
