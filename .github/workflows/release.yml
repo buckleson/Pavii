@@ -61,8 +61,10 @@ jobs:
         with:
           name: pavii-windows-x64
           path: |
-            surfaces/gui/src-tauri/target/release/bundle/nsis/*
-            surfaces/gui/src-tauri/target/release/bundle/msi/*
+            surfaces/gui/src-tauri/target/release/bundle/nsis/*.exe
+            surfaces/gui/src-tauri/target/release/bundle/nsis/*.exe.sig
+            surfaces/gui/src-tauri/target/release/bundle/msi/*.msi
+            surfaces/gui/src-tauri/target/release/bundle/msi/*.msi.sig
 
   macos-arm64:
     name: macOS arm64
@@ -102,7 +104,7 @@ jobs:
         with:
           name: pavii-macos-arm64
           path: |
-            surfaces/gui/src-tauri/target/release/bundle/dmg/*
+            surfaces/gui/src-tauri/target/release/bundle/dmg/*.dmg
             surfaces/gui/src-tauri/target/release/bundle/macos/*.tar.gz*
 
   linux-x64:
@@ -149,9 +151,10 @@ jobs:
         with:
           name: pavii-linux-x64
           path: |
-            surfaces/gui/src-tauri/target/release/bundle/appimage/*
-            surfaces/gui/src-tauri/target/release/bundle/deb/*
-            surfaces/gui/src-tauri/target/release/bundle/rpm/*
+            surfaces/gui/src-tauri/target/release/bundle/appimage/*.AppImage
+            surfaces/gui/src-tauri/target/release/bundle/appimage/*.AppImage.sig
+            surfaces/gui/src-tauri/target/release/bundle/deb/*.deb
+            surfaces/gui/src-tauri/target/release/bundle/rpm/*.rpm
 
   publish-release:
     name: Publish release + updater manifest
@@ -241,8 +244,19 @@ jobs:
         shell: bash
         run: |
           notes="PAVii release ${RELEASE_TAG}. macOS DMG is unsigned/not notarized unless Apple signing secrets were supplied. Linux packages are native unsigned builds with signed updater bundles."
-          mapfile -t files < <(find release-artifacts -type f | sort)
+          mapfile -t files < <(
+            find release-artifacts -type f \( \
+              -name '*.exe' -o -name '*.exe.sig' -o \
+              -name '*.msi' -o -name '*.msi.sig' -o \
+              -name '*.dmg' -o \
+              -name '*.app.tar.gz' -o -name '*.app.tar.gz.sig' -o \
+              -name '*.AppImage' -o -name '*.AppImage.sig' -o \
+              -name '*.deb' -o -name '*.rpm' \
+            \) | sort
+          )
           files+=(latest.json)
+          printf 'Release upload files:\n'
+          printf '  %s\n' "${files[@]}"
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             gh release upload "$RELEASE_TAG" "${files[@]}" --clobber
             gh release edit "$RELEASE_TAG" --title "PAVii ${RELEASE_TAG}" --notes "$notes" --latest
