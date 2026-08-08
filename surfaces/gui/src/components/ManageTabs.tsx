@@ -835,7 +835,7 @@ export function ConnectSetup({
                 </span>
               </button>
               <div className="text-[11.5px] text-faint">
-                One-click sign-in is coming soon — connect manually below for now:
+                One-click PAVii connector relay is coming soon — connect manually below for now:
               </div>
             </>
           ) : cloud?.signed_in ? (
@@ -844,7 +844,7 @@ export function ConnectSetup({
             </button>
           ) : cloud ? (
             <CloudSignInInline
-              blurb={`Sign-in unlocks the one-click ${c.title} connect — or connect manually below.`}
+              blurb={`One-click PAVii connector relay for ${c.title} is coming soon — connect manually below.`}
             />
           ) : (
             // Status unknown (fetch pending/failed): never show the sign-in ask to a

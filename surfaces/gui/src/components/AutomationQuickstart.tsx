@@ -226,6 +226,8 @@ export function AutomationQuickstart({
   };
 
   const startConnect = async (name: string) => {
+    const c = connState(name);
+    if (c?.managed_paused) return;
     // §30: the broker round-trip takes seconds — narrate it on the row itself.
     setConnFlow({ name, phase: "opening" });
     // GitHub is authorize-first at the BROKER: one connect links an existing
@@ -347,6 +349,15 @@ export function AutomationQuickstart({
                         ? "Opening browser…"
                         : `Waiting for ${c?.title || name}…`}
                     </span>
+                  ) : c?.managed_paused ? (
+                    <button
+                      className="px-3.5 py-1 rounded-full border border-line text-[12.5px] opacity-50 cursor-not-allowed"
+                      disabled
+                      data-testid={`ob-connect-${name}-coming-soon`}
+                      title="One-click PAVii connector relay is coming soon. Use Manual setup from the Connectors page for now."
+                    >
+                      Coming soon
+                    </button>
                   ) : (
                     <button
                       className="px-3.5 py-1 rounded-full border border-line text-[12.5px] hover:bg-paper"

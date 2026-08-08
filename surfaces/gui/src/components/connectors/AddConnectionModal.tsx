@@ -92,6 +92,8 @@ export function AddConnectionModal({
             {pane === "one" ? (
               mcpBacked ? (
                 <McpOneClick c={c} onConnected={() => { onChanged(); onClose(); }} />
+              ) : c.managed_paused ? (
+                <ManagedComingSoon c={c} />
               ) : c.name === "hubspot" ? (
                 <HubSpotOneClick c={c} cloud={cloud} />
               ) : c.name === "github" ? (
@@ -119,6 +121,28 @@ export function AddConnectionModal({
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function ManagedComingSoon({ c }: { c: Connector }) {
+  return (
+    <div className="px-5 py-4 space-y-3">
+      <p className="text-[13px] text-muted">
+        One-click PAVii connector relay for {c.title} is coming soon. Use Manual setup
+        for now; it keeps credentials on this computer and does not require a PAVii
+        account.
+      </p>
+      <button
+        className={PILL_ACCENT + " w-full !py-2 opacity-50 cursor-not-allowed"}
+        data-testid="modal-managed-coming-soon"
+        disabled
+      >
+        One-click connect · Coming soon
+      </button>
+      <p className="text-[12px] text-faint text-center">
+        Manual setup remains available in the Manual tab.
+      </p>
     </div>
   );
 }

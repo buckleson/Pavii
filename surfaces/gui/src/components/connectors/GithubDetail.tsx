@@ -29,14 +29,14 @@ const LABEL = "text-[12.5px] text-muted w-24 shrink-0";
 
 /** The relay status line, one honest layer at a time (the Slack rule). */
 function relayHealth(gh: GithubStatus | null): { dot: string; text: string } {
-  if (!gh) return { dot: "bg-ok", text: "Live · managed relay" };
+  if (!gh) return { dot: "bg-ok", text: "Live · PAVii relay" };
   if (!gh.signed_in)
     return { dot: "bg-warnInk", text: "Sign-in needed — relaying is paused" };
   if (gh.relay.state === "offline")
     return { dot: "bg-faint/60", text: "Offline — can't reach the relay" };
   if (gh.relay.state === "reconnecting")
     return { dot: "bg-warnInk", text: "Reconnecting to the relay…" };
-  return { dot: "bg-ok", text: "Live · managed relay" };
+  return { dot: "bg-ok", text: "Live · PAVii relay" };
 }
 
 export function GithubDetail({ c, cloud, onChanged }: DetailProps) {
@@ -98,9 +98,9 @@ export function GithubDetail({ c, cloud, onChanged }: DetailProps) {
       {!c.connected && (
         <div className={GRP}>
           <div className={ROW + " text-[12.5px] text-muted"}>
-            One @Pavii App, installed per account or org — you pick the repos on
+            One @Pavii app, installed per account or org — you pick the repos on
             GitHub; each installation keeps its own allow-list.
-            {cloud?.signed_in ? "" : " One-click needs cloud sign-in; a PAT works without it."}
+            {cloud?.signed_in ? "" : " One-click PAVii relay is coming soon; a PAT works without it."}
           </div>
         </div>
       )}
@@ -120,8 +120,8 @@ export function GithubDetail({ c, cloud, onChanged }: DetailProps) {
       {c.connected && !relay && (
         <div className={GRP} data-testid="github-manual-card">
           <div className={ROW + " text-[12.5px] text-muted"}>
-            Personal access token · tools only. Install the GitHub App to let
-            @-mentions and the PAVii label reach this computer.
+            Personal access token · tools only. A future PAVii GitHub App will let
+            @Pavii mentions and the PAVii label reach this computer.
           </div>
         </div>
       )}

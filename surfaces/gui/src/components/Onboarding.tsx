@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import {
-  cloudLogin,
   connectManaged,
   getCloudStatus,
   getConnectors,
@@ -65,6 +64,7 @@ export function Onboarding({ onDone }: { onDone: (next?: "work" | "gallery" | "a
   const [signinPhase, setSigninPhase] = useState<"opening" | "waiting" | null>(null);
   // One in-flight connect at a time; clicking another card quietly resets the first.
   const [pendingTool, setPendingTool] = useState<string | null>(null);
+  const oneClickRelayReady = false;
 
   // Poll while on the tools page: sign-in AND vendor consents land out-of-band in
   // the system browser. Tighten while either is actually in flight.
@@ -193,7 +193,7 @@ export function Onboarding({ onDone }: { onDone: (next?: "work" | "gallery" | "a
                       <span className="block text-[13.5px] font-semibold leading-tight">{benefit}</span>
                       <span className="block text-[12px] text-muted truncate">{detail}</span>
                     </span>
-                    {cloud?.signed_in &&
+                    {oneClickRelayReady &&
                       (c.connected ? (
                         <span className="text-[12px] text-ok font-medium shrink-0">✓ Connected</span>
                       ) : pendingTool === name ? (
@@ -225,21 +225,21 @@ export function Onboarding({ onDone }: { onDone: (next?: "work" | "gallery" | "a
                     Coming soon — pending Google&rsquo;s app verification.
                   </span>
                 </span>
-                {cloud?.signed_in && <span className="text-[11.5px] text-faint shrink-0">Coming soon</span>}
+                {oneClickRelayReady && <span className="text-[11.5px] text-faint shrink-0">Coming soon</span>}
               </div>
             </div>
 
             {/* The band is PINNED outside the scroll area and its slot never moves: the ask
                 pre-sign-in, a green congrats after — zero layout shift at the moment the user
                 returns from the browser (§41). */}
-            {!cloud?.signed_in ? (
+            {!oneClickRelayReady ? (
               <div className="mt-3.5 rounded-xl border border-line bg-paper px-4 py-3 flex items-center gap-3.5 shrink-0">
                 <span className="flex-1 text-[12.5px] text-muted leading-snug">
                   <span className="block text-[13px] font-semibold text-ink mb-0.5">
-                    Sign in for one-click connections
+                    One-click connections are coming soon
                   </span>
-                  PAVii handles the OAuth for 20+ tools — no dev consoles, no pasted keys.
-                  Tokens stay on this computer.
+                  PAVii connector relay will handle OAuth for hosted tools later. For now,
+                  use Manual setup from the Connectors page.
                 </span>
                 {signinPhase ? (
                   <span className="inline-flex items-center gap-2 text-[12.5px] text-muted shrink-0">
@@ -261,15 +261,11 @@ export function Onboarding({ onDone }: { onDone: (next?: "work" | "gallery" | "a
                   </span>
                 ) : (
                   <button
-                    className="shrink-0 px-5 py-2 rounded-full bg-ink text-panel text-[13px]"
-                    onClick={async () => {
-                      setSigninPhase("opening");
-                      await cloudLogin().catch(() => {});
-                      setSigninPhase("waiting");
-                    }}
+                    className="shrink-0 px-5 py-2 rounded-full bg-ink text-panel text-[13px] opacity-50 cursor-not-allowed"
+                    disabled
                     data-testid="ob-cloud-signin"
                   >
-                    Sign in
+                    Coming soon
                   </button>
                 )}
               </div>
@@ -279,7 +275,7 @@ export function Onboarding({ onDone }: { onDone: (next?: "work" | "gallery" | "a
                 data-testid="ob-tools-signedin"
               >
                 <span className="block text-[13px] font-semibold text-ok mb-0.5">
-                  🎉 You&rsquo;re signed in{cloud.account ? ` as ${cloud.account}` : ""}
+                  🎉 You&rsquo;re signed in{cloud?.account ? ` as ${cloud.account}` : ""}
                 </span>
                 <span className="block text-[12.5px] text-muted">
                   Connect a tool above with one click — or add them anytime later from the
@@ -290,7 +286,7 @@ export function Onboarding({ onDone }: { onDone: (next?: "work" | "gallery" | "a
 
             {/* One footer button, one slot: quiet skip pre-sign-in, black Next after. */}
             <div className="flex items-center mt-3.5">
-              {cloud?.signed_in ? (
+              {oneClickRelayReady ? (
                 <button
                   className="ml-auto px-6 py-2 rounded-full bg-ink text-panel text-[13px] shrink-0"
                   onClick={() => setStep(2)}

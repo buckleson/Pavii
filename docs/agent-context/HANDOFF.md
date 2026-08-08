@@ -8,7 +8,7 @@
 - Fresh default workspaces use `~/PAVii`.
 - Sidebar product account row was replaced with a local app menu.
 - Persona Gallery UI and backend gallery routes were removed.
-- PAVii connector relay sign-in is enabled for managed one-click connector installs through `/v1/cloud/status`, `/v1/cloud/login`, `/v1/cloud/logout`, `/v1/cloud/telemetry`, and `/v1/auth/callback`.
+- PAVii connector relay UI remains visible, but hosted one-click sign-in/connect is parked as “Coming soon” for Phase 1. `/v1/cloud/login` and managed connector starts are default-off unless a later Phase 2 build explicitly enables the relay after PAVii-owned provider apps exist.
 - Release workflow added at `.github/workflows/release.yml`.
 - Search/settings/sidebar shortcuts now render and behave per-platform: macOS uses Command, Windows/Linux use Ctrl.
 - Assistant identity prompts now introduce `Pavii.AI`, website `https://www.pavii.tech/`, as a model-agnostic personal assistant.

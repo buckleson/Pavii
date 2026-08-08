@@ -54,10 +54,10 @@ export function GmailDetail({ c, cloud, slack: _slack, onChanged }: DetailProps)
           disabled={busy || !cloud?.signed_in || c.managed_paused}
           title={
             c.managed_paused
-              ? "One-click Google sign-in is coming soon"
+              ? "One-click PAVii connector relay is coming soon"
               : cloud?.signed_in
                 ? ""
-                : "Browser connection is unavailable in this PAVii build"
+                : "One-click PAVii connector relay is coming soon"
           }
         >
           {c.managed_paused ? "＋ Add account · Coming soon" : busy ? "Check your browser…" : "＋ Add account"}
@@ -67,8 +67,8 @@ export function GmailDetail({ c, cloud, slack: _slack, onChanged }: DetailProps)
       {!c.connected && (
         <div className={GRP}>
           <div className={ROW + " text-[12.5px] text-muted"}>
-            Sign in with Google — each mailbox stays separate, agents say which one they use.
-            {cloud?.signed_in ? "" : " Browser connection is unavailable in this PAVii build."}
+            One-click Google sign-in is coming soon. Manual setup keeps each mailbox separate,
+            and PAVii says which one it uses.
           </div>
         </div>
       )}

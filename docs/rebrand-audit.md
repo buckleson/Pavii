@@ -5,11 +5,11 @@ Audit date: 2026-08-08.
 ## Current status
 
 - Root README is approved for publishing and contains PAVii download buttons.
-- GitHub Actions release workflow `31251624562` completed successfully before this audit and published `v0.1.7-dev.9`.
+- GitHub Actions release workflow `31254295698` completed successfully before this audit and published `v0.1.7-dev.11`.
 - The updater endpoint is `https://github.com/buckleson/Pavii/releases/latest/download/latest.json`.
 - `latest.json` contains signed updater entries for `windows-x86_64`, `darwin-aarch64`, and `linux-x86_64`.
 - External dashboard rebrand work is documented in `docs/external-connector-rebrand.md`.
-- PAVii connector relay sign-in is restored for one-click connector installs; old Persona Gallery/product gallery routes remain removed.
+- PAVii connector relay UI is present, but hosted one-click sign-in/connect is disabled as “Coming soon” for Phase 1; old Persona Gallery/product gallery routes remain removed.
 
 ## Retained compatibility/internal names
 
@@ -44,7 +44,7 @@ Docs intentionally mention OpenWorker/OCW when describing:
 
 - the original source tree name;
 - retained compatibility identifiers;
-- restored PAVii connector relay sign-in, removed gallery surfaces;
+- parked PAVii connector relay sign-in, removed gallery surfaces;
 - legacy updater continuity limits;
 - external dashboard values that must be replaced manually.
 
@@ -52,7 +52,7 @@ These are acceptable as documentation, not unresolved product UI.
 
 ## External dashboard todo
 
-Provider-owned names/logos/descriptions may still show old branding until changed manually in the provider dashboards. Track those in `docs/external-connector-rebrand.md`.
+Provider-owned names/logos/descriptions may still show old branding until changed manually in the provider dashboards. Because one-click relay is disabled for Phase 1, these dashboard updates are not required before shipping manual/local connectors. Track the Phase 2 work in `docs/external-connector-rebrand.md`.
 
 High-priority external surfaces:
 
@@ -69,8 +69,9 @@ Browser-control findings on 2026-08-08:
 
 ## Unresolved user-visible code issues
 
-No unresolved user-visible code rebrand issues were identified in this audit pass.
+- The GitHub connector detail page previously exposed `@ocw-agent` / `ocw-agent[bot]` text in connected relay installs. The runtime copy now uses `@Pavii`, the `PAVii` label, and PAVii GitHub App wording.
+- No unresolved user-visible code rebrand issues were identified after this audit pass.
 
 ## Build decision
 
-README/docs-only changes do not require rebuilding desktop packages. If the release workflow is updated to publish stable README download aliases, rerun GitHub Actions release publishing so those aliases exist on the latest release.
+This pass changes production UI/backend behavior, so local checks are required before pushing. Trigger a fresh release if the downloadable app should immediately reflect disabled one-click relay behavior.

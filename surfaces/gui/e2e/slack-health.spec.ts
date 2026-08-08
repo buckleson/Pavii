@@ -47,7 +47,7 @@ test("signed in + live socket: Live everywhere", async ({ page }) => {
   await openConnectors(page);
   await expect(page.getByTestId("connector-slack")).toContainText("Live");
   await page.getByTestId("connector-slack").click();
-  await expect(page.getByTestId("slack-mode-badge")).toContainText("Live · managed relay");
+  await expect(page.getByTestId("slack-mode-badge")).toContainText("Live · PAVii relay");
 });
 
 test("relay socket reconnecting: warn chip + status line", async ({ page }) => {

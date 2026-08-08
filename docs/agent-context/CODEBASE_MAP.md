@@ -17,7 +17,7 @@ Phase 1 boundaries:
 - User-visible product name is `PAVii`.
 - Compatibility-sensitive internal identity stays legacy: package names, `coworker` module names, `openworker-server` sidecar executable, `com.openworker.desktop`, `X-OpenWorker-Token`, and existing config/storage directories.
 - New default conversation workspace is `~/PAVii`; saved user paths are not migrated.
-- PAVii connector relay sign-in is enabled only for managed one-click connector installs; Persona Gallery UI/routes remain removed.
+- PAVii connector relay surfaces remain visible, but hosted one-click sign-in/connect flows are disabled as “Coming soon” until PAVii-owned external provider apps and relay infrastructure are ready; Persona Gallery UI/routes remain removed.
 - Connector-auth internals that still use cloud/broker naming remain only where connector OAuth depends on them.
 - Platform shortcuts are centralized in `surfaces/gui/src/shortcuts.ts`: macOS uses Command labels/handlers, Windows and Linux use Ctrl labels/handlers.
 - PAVii connector display identity is code-level only; external Slack/GitHub app display names must also be changed in their provider dashboards where the provider owns the shown bot/app name.

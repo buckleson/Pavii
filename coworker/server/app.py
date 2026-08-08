@@ -958,11 +958,17 @@ def create_app(manager: SessionManager) -> FastAPI:
     @app.post("/v1/cloud/login")
     async def cloud_login() -> dict[str, Any]:
         """Start the optional PAVii connector relay sign-in in the system browser."""
+        import os
         import webbrowser
 
         from .. import cloud
         from ..config import load_config
 
+        if os.environ.get("PAVII_CONNECTOR_RELAY_ENABLED") != "1":
+            return {
+                "ok": False,
+                "error": "PAVii connector relay is coming soon. Use manual connector setup for now.",
+            }
         out = await asyncio.to_thread(lambda: cloud.begin_login(load_config()))
         if out.get("authorize_url"):
             webbrowser.open(out["authorize_url"])
@@ -1041,6 +1047,7 @@ def create_app(manager: SessionManager) -> FastAPI:
         consent page in the system browser; the broker's callback page will
         form-POST the tokens to /oauth/callback below. `access` picks a consent
         tier by NAME (e.g. hubspot read | write) — the broker owns the scopes."""
+        import os
         import webbrowser
 
         from .. import cloud
@@ -1048,6 +1055,12 @@ def create_app(manager: SessionManager) -> FastAPI:
         from ..connectors.descriptors import get_descriptor
 
         d = get_descriptor(name)
+        if os.environ.get("PAVII_CONNECTOR_RELAY_ENABLED") != "1":
+            title = d.title if d is not None else name
+            return {
+                "ok": False,
+                "error": f"one-click connect for {title} is coming soon — connect manually for now",
+            }
         if d is not None and d.managed_paused:
             # GUI shows the Coming-soon state; this guard covers stale GUIs/API callers.
             return {

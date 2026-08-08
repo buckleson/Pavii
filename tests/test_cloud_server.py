@@ -1,8 +1,9 @@
 """Sidecar loopback routes for PAVii connector relay and gallery removal.
 
 PAVii keeps local connector OAuth callbacks, signed-out local operation, and a
-PAVii-branded connector relay sign-in. The old product gallery routes must
-remain unreachable.
+PAVii-branded connector relay surface. Hosted relay sign-in stays disabled for
+Phase 1 until PAVii-owned external provider apps are ready. The old product
+gallery routes must remain unreachable.
 """
 
 from __future__ import annotations
@@ -29,7 +30,7 @@ def client(tmp_path, monkeypatch):
         yield c
 
 
-def test_connector_relay_sign_in_routes_are_branded_and_gallery_removed(client, monkeypatch):
+def test_connector_relay_sign_in_routes_are_parked_and_gallery_removed(client, monkeypatch):
     opened: list[str] = []
     monkeypatch.setattr("webbrowser.open", lambda url: opened.append(url))
 
@@ -43,8 +44,9 @@ def test_connector_relay_sign_in_routes_are_branded_and_gallery_removed(client, 
 
     login = client.post("/v1/cloud/login")
     assert login.status_code == 200
-    assert login.json()["ok"] is True
-    assert opened and "opencoworker.us.auth0.com" in opened[0]
+    assert login.json()["ok"] is False
+    assert "coming soon" in login.json()["error"].lower()
+    assert opened == []
 
     callback = client.get("/v1/auth/callback", params={"error": "access_denied"})
     assert callback.status_code == 400
@@ -55,11 +57,9 @@ def test_connector_relay_sign_in_routes_are_branded_and_gallery_removed(client, 
 
 
 def test_connect_managed_requires_sign_in(client):
-    # notion, not gmail: the Google trio is managed_paused (CASA pending) and its
-    # guard fires before the sign-in check — see test_google_one_click_paused….
     body = client.post("/v1/connectors/notion/connect-managed").json()
     assert not body["ok"]
-    assert "not signed in" in body["error"]
+    assert "coming soon" in body["error"].lower()
 
 
 def test_oauth_callback_writes_profile_and_returns_page(client):

@@ -462,6 +462,7 @@ DESCRIPTORS: list[ConnectorDescriptor] = [
         # fields below stay as the always-available fallback (slack → slack in
         # PROVIDER_FOR_CONNECTOR drives the broker start).
         managed=True,
+        managed_paused=True,
         fields=[
             Field(
                 "bot_token",
@@ -633,6 +634,7 @@ DESCRIPTORS: list[ConnectorDescriptor] = [
         available=True,
         # One-click managed path: install the GitHub App — no tokens typed.
         managed=True,
+        managed_paused=True,
     ),
     ConnectorDescriptor(
         name="outlook",
@@ -660,6 +662,7 @@ DESCRIPTORS: list[ConnectorDescriptor] = [
         validate=_validate_outlook,
         available=True,
         managed=True,
+        managed_paused=True,
         # Key each connected mailbox by its email (the broker's `account` field,
         # from the Microsoft id_token) — same multi-account shape as Gmail/Drive.
         account_field="@identity",
@@ -915,6 +918,7 @@ DESCRIPTORS: list[ConnectorDescriptor] = [
         ],
         validate=_validate_hubspot,
         managed=True,
+        managed_paused=True,
     ),
     ConnectorDescriptor(
         name="dropbox",
@@ -1265,6 +1269,7 @@ DESCRIPTORS: list[ConnectorDescriptor] = [
         brand_color="#1f2328",
         logo="notion",
         managed=True,
+        managed_paused=True,
         # Managed profiles key by the workspace id the broker sends
         # (account_id); a manual integration token falls back to the
         # validator's workspace name.
@@ -1293,6 +1298,7 @@ DESCRIPTORS: list[ConnectorDescriptor] = [
         brand_color="#2d7ff9",
         logo="attio",
         managed=True,
+        managed_paused=True,
         account_field="account_id",
     ),
     ConnectorDescriptor(

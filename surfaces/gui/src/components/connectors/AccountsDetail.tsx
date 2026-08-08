@@ -22,7 +22,7 @@ export function AccountsDetail({ c, cloud, slack: _slack, onChanged }: DetailPro
   const [busy, setBusy] = useState(false);
   const [showManual, setShowManual] = useState(false);
   const accounts = (c.accounts ?? []) as AccountRow[];
-  const canOneClick = c.managed && !!cloud?.signed_in;
+  const canOneClick = c.managed && !!cloud?.signed_in && !c.managed_paused;
 
   const addManaged = async () => {
     setBusy(true);
@@ -58,11 +58,13 @@ export function AccountsDetail({ c, cloud, slack: _slack, onChanged }: DetailPro
           disabled={busy}
           title={
             c.managed && !cloud?.signed_in
-              ? "One-click is unavailable in this PAVii build - add a token below"
+              ? "One-click PAVii connector relay is coming soon — add a token below"
+              : c.managed_paused
+                ? "One-click PAVii connector relay is coming soon — add a token below"
               : ""
           }
         >
-          {busy ? "Check your browser…" : "＋ Add account"}
+          {busy ? "Check your browser…" : c.managed_paused ? "＋ Add account · Coming soon" : "＋ Add account"}
         </button>
       </div>
 

@@ -42,14 +42,14 @@ const LABEL = "text-[12.5px] text-muted w-24 shrink-0";
 /** The relay status line, one honest layer at a time: sign-in → socket → live.
  * Dot color + text; never a synthetic "Slack is down" claim. */
 function relayHealth(slack: SlackStatus | null): { dot: string; text: string } {
-  if (!slack) return { dot: "bg-ok", text: "Live · managed relay" };
+  if (!slack) return { dot: "bg-ok", text: "Live · PAVii relay" };
   if (!slack.signed_in)
     return { dot: "bg-warnInk", text: "Sign-in needed — relaying is paused" };
   if (slack.relay.state === "offline")
     return { dot: "bg-faint/60", text: "Offline — can't reach the relay" };
   if (slack.relay.state === "reconnecting")
     return { dot: "bg-warnInk", text: "Reconnecting to the relay…" };
-  return { dot: "bg-ok", text: "Live · managed relay" };
+  return { dot: "bg-ok", text: "Live · PAVii relay" };
 }
 
 export function SlackDetail({ c, cloud, slack, onChanged }: DetailProps) {
@@ -103,7 +103,7 @@ export function SlackDetail({ c, cloud, slack, onChanged }: DetailProps) {
         <div className={GRP}>
           <div className={ROW + " text-[12.5px] text-muted"}>
             One @Pavii app, installed per workspace — each keeps its own allow-list.
-            {cloud?.signed_in ? "" : " One-click needs cloud sign-in; Manual works without it."}
+            {cloud?.signed_in ? "" : " One-click PAVii relay is coming soon; Manual works without it."}
           </div>
         </div>
       )}
