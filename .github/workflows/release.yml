@@ -244,6 +244,28 @@ jobs:
         shell: bash
         run: |
           notes="PAVii release ${RELEASE_TAG}. macOS DMG is unsigned/not notarized unless Apple signing secrets were supplied. Linux packages are native unsigned builds with signed updater bundles."
+          python3 - <<'PY'
+          from pathlib import Path
+          import shutil
+
+          root = Path("release-artifacts")
+
+          def alias(pattern: str, stable_name: str) -> None:
+              matches = sorted(root.rglob(pattern))
+              if not matches:
+                  raise SystemExit(f"missing release artifact matching {pattern}")
+              source = matches[0]
+              target = root / "stable-aliases" / stable_name
+              target.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copy2(source, target)
+
+          alias("PAVii_*_x64-setup.exe", "PAVii-Windows-x64-setup.exe")
+          alias("PAVii_*_x64_en-US.msi", "PAVii-Windows-x64.msi")
+          alias("*.dmg", "PAVii-macOS-arm64.dmg")
+          alias("*.AppImage", "PAVii-Linux-x64.AppImage")
+          alias("*.deb", "PAVii-Linux-x64.deb")
+          alias("*.rpm", "PAVii-Linux-x64.rpm")
+          PY
           mapfile -t files < <(
             find release-artifacts -type f \( \
               -name '*.exe' -o -name '*.exe.sig' -o \

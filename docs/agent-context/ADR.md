@@ -32,4 +32,4 @@ The updater key is separate from Apple Developer signing/notarization and Window
 - Linux AppImage/deb/rpm artifacts are unsigned native packages unless Linux package signing is added later; updater bundles are minisign-signed.
 - Windows installers may be unsigned unless Authenticode credentials are added later.
 - Local Windows Rust builds require `LIBCLANG_PATH` for `whisper-rs-sys`; this workstation uses `G:\pavii.ai\.toolcache\llvm\clang+llvm-22.1.8-x86_64-pc-windows-msvc\bin`.
-- README edits remain local until explicitly authorized.
+- Root README publishing was explicitly authorized after Phase 1; nested README files remain local until separately authorized.

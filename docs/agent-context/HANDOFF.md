@@ -36,9 +36,16 @@ Generated Windows artifacts:
 
 Local Windows EXE smoke launch from the non-interactive shell returned immediately with no stderr or nonzero exit code; installer/signature generation is verified, but an interactive launch should still be visually checked.
 
-## Still To Do Before Release
+## Release Status
 
-- Push tested non-README commits.
-- Run native GitHub Actions packaging for Windows x64, macOS arm64, and Linux x64.
-- Validate `latest.json` with `windows-x86_64`, `darwin-aarch64`, and `linux-x86_64` signed updater artifacts.
-- Keep README changes uncommitted/unpushed until explicit user approval.
+- Tested non-README commits were pushed.
+- GitHub Actions release workflow `31251624562` completed successfully.
+- Release `v0.1.7-dev.9` contains Windows, macOS, Linux, updater signatures, and `latest.json`.
+- `latest.json` includes `windows-x86_64`, `darwin-aarch64`, and `linux-x86_64`.
+- Root README publishing is now explicitly approved; nested README files remain local/unpublished unless separately requested.
+
+## Still To Do
+
+- Run real installed-app checks on Windows, macOS, and Linux package artifacts.
+- Complete external provider dashboard rebrands tracked in `docs/external-connector-rebrand.md`.
+- Add Apple notarization and Windows/Linux package signing credentials later if distributable signed packages are required.
